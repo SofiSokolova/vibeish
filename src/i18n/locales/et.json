@@ -1,0 +1,47 @@
+{
+  "tabs": {
+    "feed": "Voog",
+    "meetups": "Kohtumised",
+    "create": "Loo",
+    "chats": "Vestlused",
+    "profile": "Profiil"
+  },
+  "feed": {
+    "title": "Voog",
+    "body": "Siia ilmuvad kuulutused sinu lähedal. Pühi paremale, et liituda, ja vasakule, et vahele jätta."
+  },
+  "meetups": {
+    "title": "Minu kohtumised",
+    "body": "Sinu kuulutused ja liitumissoovid ühes kohas."
+  },
+  "create": {
+    "title": "Uus kuulutus",
+    "body": "Vali hobi, aeg ja koht ning leia seltskond.",
+    "chooseHobby": "Vali hobi",
+    "groupRange": "Grupp: {{min}}–{{max}}",
+    "groupExact": "Grupp: {{size}}"
+  },
+  "chats": {
+    "title": "Vestlused",
+    "body": "Vestlus avaneb, kui kuulutuse autor sind vastu võtab."
+  },
+  "profile": {
+    "title": "Profiil",
+    "body": "Siin saad hallata oma profiili, hobisid ja seadeid.",
+    "language": "Rakenduse keel"
+  },
+  "category": {
+    "table_tennis": "Lauatennis",
+    "badminton": "Sulgpall",
+    "tennis": "Tennis",
+    "board_games": "Lauamängud",
+    "chess": "Male",
+    "running": "Jooksmine",
+    "hiking": "Matkamine",
+    "climbing": "Ronimine",
+    "football": "Jalgpall",
+    "volleyball": "Võrkpall",
+    "cycling": "Rattasõit",
+    "language_exchange": "Keelevahetus"
+  }
+}

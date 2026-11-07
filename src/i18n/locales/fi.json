@@ -1,0 +1,47 @@
+{
+  "tabs": {
+    "feed": "Syöte",
+    "meetups": "Tapaamiset",
+    "create": "Luo",
+    "chats": "Keskustelut",
+    "profile": "Profiili"
+  },
+  "feed": {
+    "title": "Syöte",
+    "body": "Tähän ilmestyvät lähelläsi olevat ilmoitukset. Pyyhkäise oikealle liittyäksesi ja vasemmalle ohittaaksesi."
+  },
+  "meetups": {
+    "title": "Omat tapaamiset",
+    "body": "Omat ilmoituksesi ja liittymispyyntösi samassa paikassa."
+  },
+  "create": {
+    "title": "Uusi ilmoitus",
+    "body": "Valitse harrastus, aika ja paikka – ja löydä seuraa.",
+    "chooseHobby": "Valitse harrastus",
+    "groupRange": "Ryhmä: {{min}}–{{max}}",
+    "groupExact": "Ryhmä: {{size}}"
+  },
+  "chats": {
+    "title": "Keskustelut",
+    "body": "Keskustelu avautuu, kun ilmoituksen tekijä hyväksyy sinut."
+  },
+  "profile": {
+    "title": "Profiili",
+    "body": "Täällä voit hallita profiiliasi, harrastuksiasi ja asetuksiasi.",
+    "language": "Sovelluksen kieli"
+  },
+  "category": {
+    "table_tennis": "Pöytätennis",
+    "badminton": "Sulkapallo",
+    "tennis": "Tennis",
+    "board_games": "Lautapelit",
+    "chess": "Shakki",
+    "running": "Juoksu",
+    "hiking": "Vaellus",
+    "climbing": "Kiipeily",
+    "football": "Jalkapallo",
+    "volleyball": "Lentopallo",
+    "cycling": "Pyöräily",
+    "language_exchange": "Kielivaihto"
+  }
+}

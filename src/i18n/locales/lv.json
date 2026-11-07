@@ -1,0 +1,47 @@
+{
+  "tabs": {
+    "feed": "Plūsma",
+    "meetups": "Tikšanās",
+    "create": "Izveidot",
+    "chats": "Sarunas",
+    "profile": "Profils"
+  },
+  "feed": {
+    "title": "Plūsma",
+    "body": "Šeit parādīsies sludinājumi tavā tuvumā. Pavelc pa labi, lai pieteiktos, pa kreisi — lai izlaistu."
+  },
+  "meetups": {
+    "title": "Manas tikšanās",
+    "body": "Tavi sludinājumi un pieteikumi vienuviet."
+  },
+  "create": {
+    "title": "Jauns sludinājums",
+    "body": "Izvēlies hobiju, laiku un vietu — un atrodi kompāniju.",
+    "chooseHobby": "Izvēlies hobiju",
+    "groupRange": "Grupa: {{min}}–{{max}}",
+    "groupExact": "Grupa: {{size}}"
+  },
+  "chats": {
+    "title": "Sarunas",
+    "body": "Saruna atvērsies, kad sludinājuma autors tevi apstiprinās."
+  },
+  "profile": {
+    "title": "Profils",
+    "body": "Šeit varēsi pārvaldīt savu profilu, hobijus un iestatījumus.",
+    "language": "Lietotnes valoda"
+  },
+  "category": {
+    "table_tennis": "Galda teniss",
+    "badminton": "Badmintons",
+    "tennis": "Teniss",
+    "board_games": "Galda spēles",
+    "chess": "Šahs",
+    "running": "Skriešana",
+    "hiking": "Pārgājieni",
+    "climbing": "Kāpšana",
+    "football": "Futbols",
+    "volleyball": "Volejbols",
+    "cycling": "Riteņbraukšana",
+    "language_exchange": "Valodu apmaiņa"
+  }
+}

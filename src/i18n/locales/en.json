@@ -1,0 +1,47 @@
+{
+  "tabs": {
+    "feed": "Feed",
+    "meetups": "Meetups",
+    "create": "Create",
+    "chats": "Chats",
+    "profile": "Profile"
+  },
+  "feed": {
+    "title": "Feed",
+    "body": "Listings near you will show up here. Swipe right to join, left to skip."
+  },
+  "meetups": {
+    "title": "My meetups",
+    "body": "Your listings and your requests to join, all in one place."
+  },
+  "create": {
+    "title": "New listing",
+    "body": "Pick a hobby, a time and a place, and find company.",
+    "chooseHobby": "Choose a hobby",
+    "groupRange": "Group: {{min}}–{{max}}",
+    "groupExact": "Group: {{size}}"
+  },
+  "chats": {
+    "title": "Chats",
+    "body": "A chat opens once the author of a listing accepts you."
+  },
+  "profile": {
+    "title": "Profile",
+    "body": "This is where you'll manage your profile, hobbies and settings.",
+    "language": "App language"
+  },
+  "category": {
+    "table_tennis": "Table tennis",
+    "badminton": "Badminton",
+    "tennis": "Tennis",
+    "board_games": "Board games",
+    "chess": "Chess",
+    "running": "Running",
+    "hiking": "Hiking",
+    "climbing": "Climbing",
+    "football": "Football",
+    "volleyball": "Volleyball",
+    "cycling": "Cycling",
+    "language_exchange": "Language exchange"
+  }
+}

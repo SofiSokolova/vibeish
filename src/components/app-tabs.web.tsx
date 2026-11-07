@@ -1,39 +1,75 @@
+import Constants from 'expo-constants';
 import {
-  Tabs,
   TabList,
-  TabTrigger,
   TabSlot,
-  TabTriggerSlotProps,
-  TabListProps,
+  TabTrigger,
+  Tabs,
+  type TabListProps,
+  type TabTriggerSlotProps,
 } from 'expo-router/ui';
 import { SymbolView } from 'expo-symbols';
-import { Pressable, useColorScheme, View, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Colors, MaxContentWidth, Spacing } from '@/constants/theme';
+import { TABS, type AppTab } from '@/constants/tabs';
+import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { useCompactLayout } from '@/hooks/use-compact-layout';
+import { useTheme } from '@/hooks/use-theme';
 
-import { ExternalLink } from './external-link';
 import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
+/** Web tabs: a floating bar on top for wide screens, an app-like bar at the bottom on phones. */
 export default function AppTabs() {
+  const { t } = useTranslation();
+  const compact = useCompactLayout();
+
   return (
     <Tabs>
       <TabSlot style={{ height: '100%' }} />
       <TabList asChild>
-        <CustomTabList>
-          <TabTrigger name="home" href="/" asChild>
-            <TabButton>Home</TabButton>
-          </TabTrigger>
-          <TabTrigger name="explore" href="/explore" asChild>
-            <TabButton>Explore</TabButton>
-          </TabTrigger>
+        <CustomTabList compact={compact}>
+          {TABS.map((tab) => (
+            <TabTrigger key={tab.name} name={tab.name} href={tab.href} asChild>
+              <TabButton tab={tab} compact={compact}>
+                {t(tab.label)}
+              </TabButton>
+            </TabTrigger>
+          ))}
         </CustomTabList>
       </TabList>
     </Tabs>
   );
 }
 
-export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
+// `ref` is left out of the type only: expo-router types it as a ref to the View component
+// rather than to an element, which Pressable rejects. At runtime it still reaches Pressable via ...props.
+type TabButtonProps = Omit<TabTriggerSlotProps, 'ref'> & { tab: AppTab; compact: boolean };
+
+export function TabButton({ children, isFocused, tab, compact, ...props }: TabButtonProps) {
+  const theme = useTheme();
+
+  if (compact) {
+    return (
+      <Pressable
+        {...props}
+        style={({ pressed }) => [styles.compactButton, pressed && styles.pressed]}>
+        <SymbolView
+          name={{ ios: tab.sf.default, android: tab.md, web: tab.md }}
+          size={24}
+          tintColor={isFocused ? theme.text : theme.textSecondary}
+        />
+        <ThemedText
+          numberOfLines={1}
+          style={styles.compactLabel}
+          themeColor={isFocused ? 'text' : 'textSecondary'}>
+          {children}
+        </ThemedText>
+      </Pressable>
+    );
+  }
+
   return (
     <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
       <ThemedView
@@ -47,29 +83,32 @@ export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps
   );
 }
 
-export function CustomTabList(props: TabListProps) {
-  const scheme = useColorScheme();
-  const colors = Colors[scheme === 'dark' ? 'dark' : 'light'];
+type CustomTabListProps = TabListProps & { compact: boolean };
+
+export function CustomTabList({ compact, children, ...props }: CustomTabListProps) {
+  const theme = useTheme();
+  const insets = useSafeAreaInsets();
+
+  if (compact) {
+    return (
+      <ThemedView
+        {...props}
+        style={[
+          styles.bottomBar,
+          { borderTopColor: theme.backgroundSelected, paddingBottom: Spacing.two + insets.bottom },
+        ]}>
+        {children}
+      </ThemedView>
+    );
+  }
 
   return (
     <View {...props} style={styles.tabListContainer}>
       <ThemedView type="backgroundElement" style={styles.innerContainer}>
         <ThemedText type="smallBold" style={styles.brandText}>
-          Expo Starter
+          {Constants.expoConfig?.name}
         </ThemedText>
-
-        {props.children}
-
-        <ExternalLink href="https://docs.expo.dev" asChild>
-          <Pressable style={styles.externalPressable}>
-            <ThemedText type="link">Docs</ThemedText>
-            <SymbolView
-              tintColor={colors.text}
-              name={{ ios: 'arrow.up.right.square', web: 'link' }}
-              size={12}
-            />
-          </Pressable>
-        </ExternalLink>
+        {children}
       </ThemedView>
     </View>
   );
@@ -105,11 +144,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     borderRadius: Spacing.three,
   },
-  externalPressable: {
+  bottomBar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
     flexDirection: 'row',
-    justifyContent: 'center',
+    paddingTop: Spacing.two,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  },
+  compactButton: {
+    flex: 1,
+    minWidth: 0,
     alignItems: 'center',
-    gap: Spacing.one,
-    marginLeft: Spacing.three,
+    gap: Spacing.half,
+  },
+  compactLabel: {
+    fontSize: 12,
+    lineHeight: 16,
   },
 });
