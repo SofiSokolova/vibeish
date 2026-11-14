@@ -2,7 +2,7 @@
 
 # Vibeish
 
-An app and website for finding friends through shared activities; hobbies are the excuse to meet, not the limit. People swipe through activity listings near them ("table tennis on Saturday, one more player needed"), ask to join with a short note, and the listing's author picks who comes; the chosen people get a group chat. The brand is playful and youthful (slogan: "friends with no benefits"), never dating-like. Product decisions and the MVP plan: [docs/MVP.md](docs/MVP.md) (in Russian).
+An app and website for finding friends through shared activities. People swipe through activity listings near them ("table tennis on Saturday, one more player needed"), ask to join with a short note, and the listing's author picks who comes; the chosen people get a group chat. Product decisions and the MVP plan: [docs/MVP.md](docs/MVP.md).
 
 ## Stack
 
@@ -14,13 +14,12 @@ An app and website for finding friends through shared activities; hobbies are th
 ## Conventions
 
 - Every user-facing string goes through `t()`. Keys live in `src/i18n/locales/*.json`; `en.json` is the source of truth and defines the TypeScript types for `t()`. After adding or changing keys, update all six locales (en, et, ru, uk, fi, lv) and run `npm run i18n:check`.
-- Address the user informally (ты / ти / sina / sinä / tu) and keep ru/uk texts gender-neutral: no past-tense verbs about the user (avoid «ты откликнулся/откликнулась»).
+- Address users informally in every language, and keep Russian and Ukrainian texts gender-neutral: avoid past-tense verbs that describe the user, because their form depends on gender.
 - Hobby categories have permanent slugs in `src/constants/categories.ts`; the database stores the same slugs. Names exist only in the locale files as `category.<slug>`. Never rename a slug.
 - Tabs are defined once in `src/constants/tabs.ts` and rendered by `src/components/app-tabs.tsx` (native) and `app-tabs.web.tsx` (web: floating top bar on wide screens, bottom bar on phones). Tab screens use `src/components/screen.tsx`.
 - The web app is a single-page app (`web.output: "single"`): nothing is server-rendered.
 - Only `EXPO_PUBLIC_*` values go into the app, and they are public by design. Server secrets belong in Supabase Edge Function secrets, never in the repo.
 - Product rules the code must respect: 18+ only; reporting, blocking and moderation are free for everyone.
-- Commit messages: no `Co-Authored-By` or other AI-attribution lines.
 
 ## Database
 
