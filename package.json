@@ -1,5 +1,5 @@
 {
-  "name": "hobby-buddies",
+  "name": "vibeish",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
@@ -33,6 +33,7 @@
     "react-native-worklets": "0.13.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.16",
     "@types/react": "~19.3.0",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~58.0.4",
@@ -45,7 +46,8 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "i18n:check": "node ./scripts/check-i18n.js"
+    "i18n:check": "node ./scripts/check-i18n.js",
+    "db:test": "node ./scripts/db-test.mjs"
   },
   "private": true
 }

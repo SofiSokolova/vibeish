@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Hobby Buddies",
-    "slug": "hobby-buddies",
+    "name": "Vibeish",
+    "slug": "vibeish",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "hobbybuddies",
+    "scheme": "vibeish",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
