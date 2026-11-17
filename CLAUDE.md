@@ -9,7 +9,7 @@ An app and website for finding friends through shared activities. People swipe t
 - Expo SDK 58 + Expo Router (routes in `src/app`), TypeScript, one codebase for Android and web. iOS comes later.
 - Supabase: Postgres, Auth, Realtime (chat), Storage, Edge Functions. Client in `src/lib/supabase.ts`, settings in `.env` (see `.env.example`). Schema in `supabase/migrations`; coordinates are plain lat/lng with haversine distance (no PostGIS yet).
 - i18next + react-i18next + expo-localization, set up in `src/i18n`.
-- Node.js 22.13 or newer (24 LTS recommended); older versions are unsupported by Expo SDK 58.
+- Node.js 22.13 or newer (26 LTS recommended); older versions are unsupported by Expo SDK 58.
 
 ## Conventions
 

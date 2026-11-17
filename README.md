@@ -14,7 +14,7 @@ Expo (Android and web) · Supabase · interface in English, Estonian, Russian, U
 
 ## Getting started
 
-Requires Node.js 22.13 or newer.
+Requires Node.js 22.13 or newer (26 LTS recommended).
 
 ```bash
 npm install
