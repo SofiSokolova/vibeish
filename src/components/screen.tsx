@@ -16,17 +16,26 @@ type ScreenProps = {
   title: string;
   description?: string;
   children?: ReactNode;
+  /** `tab` leaves room for the tab bar; `standalone` is for screens without one, like sign-in. */
+  variant?: 'tab' | 'standalone';
 };
 
-/** A scrollable tab screen: a title, an optional description, then the screen's content. */
-export function Screen({ title, description, children }: ScreenProps) {
+/** A scrollable screen: a title, an optional description, then the screen's content. */
+export function Screen({ title, description, children, variant = 'tab' }: ScreenProps) {
   const theme = useTheme();
   const compact = useCompactLayout();
   const safeAreaInsets = useSafeAreaInsets();
+  const hasTabBar = variant === 'tab';
   const insets = {
     ...safeAreaInsets,
-    bottom: safeAreaInsets.bottom + BottomTabInset + Spacing.three,
+    bottom: safeAreaInsets.bottom + (hasTabBar ? BottomTabInset : 0) + Spacing.three,
   };
+
+  const webPadding: ViewStyle = !hasTabBar
+    ? { paddingTop: compact ? Spacing.four : Spacing.six, paddingBottom: Spacing.four + safeAreaInsets.bottom }
+    : compact
+      ? { paddingTop: Spacing.four, paddingBottom: WEB_BOTTOM_BAR_SPACE + safeAreaInsets.bottom }
+      : { paddingTop: WEB_TOP_BAR_SPACE, paddingBottom: Spacing.four };
 
   const platformPadding = Platform.select<ViewStyle>({
     android: {
@@ -35,13 +44,13 @@ export function Screen({ title, description, children }: ScreenProps) {
       paddingRight: insets.right,
       paddingBottom: insets.bottom,
     },
-    web: compact
-      ? { paddingTop: Spacing.four, paddingBottom: WEB_BOTTOM_BAR_SPACE + safeAreaInsets.bottom }
-      : { paddingTop: WEB_TOP_BAR_SPACE, paddingBottom: Spacing.four },
+    web: webPadding,
   });
 
   return (
     <ScrollView
+      // Lets a tap on a button go through while the keyboard is open.
+      keyboardShouldPersistTaps="handled"
       style={[styles.scrollView, { backgroundColor: theme.background }]}
       contentInset={insets}
       contentContainerStyle={[styles.contentContainer, platformPadding]}>

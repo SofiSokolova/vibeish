@@ -28,7 +28,9 @@
   "profile": {
     "title": "Profile",
     "body": "This is where you'll manage your profile, hobbies and settings.",
-    "language": "App language"
+    "language": "App language",
+    "account": "Signed in as {{email}}",
+    "signOut": "Sign out"
   },
   "category": {
     "table_tennis": "Table tennis",
@@ -43,5 +45,94 @@
     "volleyball": "Volleyball",
     "cycling": "Cycling",
     "language_exchange": "Language exchange"
+  },
+  "common": {
+    "back": "Back",
+    "continue": "Continue",
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "network": "No connection. Check your internet and try again."
+    }
+  },
+  "auth": {
+    "tagline": "Friends with no benefits",
+    "intro": "Find people nearby to play, walk and talk with.",
+    "language": "Language",
+    "email": "Email",
+    "emailHint": "We'll send you a code to sign in. No password needed.",
+    "getCode": "Get a code",
+    "codeSent": "We sent a code to {{email}}. It can take a minute to arrive, so check your spam folder too.",
+    "code": "Code from the email",
+    "signIn": "Sign in",
+    "resend": "Send a new code",
+    "resendIn": "New code in {{seconds}} s",
+    "changeEmail": "Use a different email",
+    "errors": {
+      "invalidEmail": "Check the email address.",
+      "shortCode": "Enter the whole code from the email.",
+      "codeInvalid": "This code is wrong or has expired. Check it or get a new one.",
+      "tooManyRequests": "Too many attempts. Wait a minute and try again.",
+      "emailNotAllowed": "We can't send email to this address yet."
+    }
+  },
+  "onboarding": {
+    "progress": "Step {{step}} of {{total}}",
+    "signOut": "Sign out",
+    "about": {
+      "title": "Before we start",
+      "birthDate": "Date of birth",
+      "day": "Day",
+      "month": "Month",
+      "year": "Year",
+      "birthDateHint": "Vibeish is only for adults. Nobody else will see your date of birth.",
+      "rulesTitle": "Community rules",
+      "rules": {
+        "respect": "Respect others: no insults, bullying or discrimination.",
+        "friendship": "Vibeish is for friendship and shared activities. No ads, spam or selling.",
+        "safety": "Meet in busy public places, especially the first time.",
+        "ai": "AI checks listings, profiles and messages. Anything that breaks the rules is hidden, and repeat offenders get their account blocked.",
+        "report": "Report and block anyone who breaks the rules. It's always free."
+      },
+      "accept": "I accept the rules",
+      "errors": {
+        "invalidDate": "Check the date: day, month and year.",
+        "underage": "Sorry, Vibeish is only for people aged 18 and over."
+      }
+    },
+    "profile": {
+      "title": "About you",
+      "name": "Name",
+      "nameHint": "Shown on your profile and in chats. A first name is enough.",
+      "languages": "Languages you speak",
+      "languagesHint": "Others will see them. Choose all that fit.",
+      "errors": {
+        "name": "Enter your name.",
+        "languages": "Choose at least one language."
+      }
+    },
+    "city": {
+      "title": "Your city",
+      "body": "Your feed will show plans from your city.",
+      "notListed": "My city isn't listed",
+      "otherCity": "Which city?",
+      "otherCityHint": "We're not there yet. We'll note your city so we know where to go next.",
+      "finish": "Done",
+      "errors": {
+        "city": "Choose your city.",
+        "otherCity": "Enter your city."
+      }
+    }
+  },
+  "city": {
+    "tallinn": "Tallinn",
+    "tartu": "Tartu",
+    "helsinki": "Helsinki",
+    "riga": "Riga",
+    "vilnius": "Vilnius"
+  },
+  "loadError": {
+    "title": "Couldn't load your profile",
+    "body": "Check your internet connection and try again.",
+    "retry": "Try again"
   }
 }

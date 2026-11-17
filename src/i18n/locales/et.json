@@ -28,7 +28,9 @@
   "profile": {
     "title": "Profiil",
     "body": "Siin saad hallata oma profiili, hobisid ja seadeid.",
-    "language": "Rakenduse keel"
+    "language": "Rakenduse keel",
+    "account": "Konto: {{email}}",
+    "signOut": "Logi välja"
   },
   "category": {
     "table_tennis": "Lauatennis",
@@ -43,5 +45,94 @@
     "volleyball": "Võrkpall",
     "cycling": "Rattasõit",
     "language_exchange": "Keelevahetus"
+  },
+  "common": {
+    "back": "Tagasi",
+    "continue": "Edasi",
+    "errors": {
+      "generic": "Midagi läks valesti. Proovi uuesti.",
+      "network": "Ühendus puudub. Kontrolli internetti ja proovi uuesti."
+    }
+  },
+  "auth": {
+    "tagline": "Friends with no benefits",
+    "intro": "Leia lähedalt seltskonda, kellega mängida, jalutada ja juttu ajada.",
+    "language": "Keel",
+    "email": "E-post",
+    "emailHint": "Saadame sulle sisselogimiseks koodi. Parooli pole vaja.",
+    "getCode": "Saada kood",
+    "codeSent": "Saatsime koodi aadressile {{email}}. Kirja saabumine võib võtta minuti, vaata ka rämpsposti kausta.",
+    "code": "Kood kirjast",
+    "signIn": "Logi sisse",
+    "resend": "Saada uus kood",
+    "resendIn": "Uus kood {{seconds}} s pärast",
+    "changeEmail": "Kasuta teist e-posti aadressi",
+    "errors": {
+      "invalidEmail": "Kontrolli e-posti aadressi.",
+      "shortCode": "Sisesta kogu kood kirjast.",
+      "codeInvalid": "Kood on vale või aegunud. Kontrolli seda või küsi uus.",
+      "tooManyRequests": "Liiga palju katseid. Oota minut ja proovi uuesti.",
+      "emailNotAllowed": "Sellele aadressile me veel kirju saata ei saa."
+    }
+  },
+  "onboarding": {
+    "progress": "Samm {{step}}/{{total}}",
+    "signOut": "Logi välja",
+    "about": {
+      "title": "Enne alustamist",
+      "birthDate": "Sünnikuupäev",
+      "day": "Päev",
+      "month": "Kuu",
+      "year": "Aasta",
+      "birthDateHint": "Vibeish on ainult täiskasvanutele. Sinu sünnikuupäeva ei näe keegi teine.",
+      "rulesTitle": "Kogukonna reeglid",
+      "rules": {
+        "respect": "Austa teisi: ei mingit solvamist, kiusamist ega diskrimineerimist.",
+        "friendship": "Vibeish on sõpruse ja ühiste tegevuste jaoks. Ilma reklaami, rämpsposti ja müügita.",
+        "safety": "Kohtu rahvarohketes kohtades, eriti esimesel korral.",
+        "ai": "Kuulutusi, profiile ja sõnumeid kontrollib tehisintellekt. Reegleid rikkuv sisu peidetakse ja korduvate rikkumiste eest konto blokeeritakse.",
+        "report": "Teata reeglite rikkujatest ja blokeeri neid. See on alati tasuta."
+      },
+      "accept": "Nõustun reeglitega",
+      "errors": {
+        "invalidDate": "Kontrolli kuupäeva: päev, kuu ja aasta.",
+        "underage": "Vabandust, Vibeish on ainult vähemalt 18-aastastele."
+      }
+    },
+    "profile": {
+      "title": "Sinust",
+      "name": "Nimi",
+      "nameHint": "Seda näevad teised sinu profiilis ja vestlustes. Eesnimest piisab.",
+      "languages": "Keeled, mida räägid",
+      "languagesHint": "Teised näevad neid. Vali kõik sobivad.",
+      "errors": {
+        "name": "Kirjuta oma nimi.",
+        "languages": "Vali vähemalt üks keel."
+      }
+    },
+    "city": {
+      "title": "Sinu linn",
+      "body": "Voos näed oma linna plaane.",
+      "notListed": "Minu linna pole nimekirjas",
+      "otherCity": "Mis linnas sa elad?",
+      "otherCityHint": "Seal me veel ei tegutse. Paneme sinu linna kirja, et teada, kuhu edasi minna.",
+      "finish": "Valmis",
+      "errors": {
+        "city": "Vali oma linn.",
+        "otherCity": "Kirjuta oma linna nimi."
+      }
+    }
+  },
+  "city": {
+    "tallinn": "Tallinn",
+    "tartu": "Tartu",
+    "helsinki": "Helsingi",
+    "riga": "Riia",
+    "vilnius": "Vilnius"
+  },
+  "loadError": {
+    "title": "Profiili laadimine ebaõnnestus",
+    "body": "Kontrolli internetiühendust ja proovi uuesti.",
+    "retry": "Proovi uuesti"
   }
 }

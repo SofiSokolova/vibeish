@@ -28,7 +28,9 @@
   "profile": {
     "title": "Profils",
     "body": "Šeit varēsi pārvaldīt savu profilu, hobijus un iestatījumus.",
-    "language": "Lietotnes valoda"
+    "language": "Lietotnes valoda",
+    "account": "Konts: {{email}}",
+    "signOut": "Iziet"
   },
   "category": {
     "table_tennis": "Galda teniss",
@@ -43,5 +45,94 @@
     "volleyball": "Volejbols",
     "cycling": "Riteņbraukšana",
     "language_exchange": "Valodu apmaiņa"
+  },
+  "common": {
+    "back": "Atpakaļ",
+    "continue": "Tālāk",
+    "errors": {
+      "generic": "Kaut kas nogāja greizi. Mēģini vēlreiz.",
+      "network": "Nav savienojuma. Pārbaudi internetu un mēģini vēlreiz."
+    }
+  },
+  "auth": {
+    "tagline": "Friends with no benefits",
+    "intro": "Atrodi tuvumā kompāniju, ar ko spēlēt, pastaigāties un parunāties.",
+    "language": "Valoda",
+    "email": "E-pasts",
+    "emailHint": "Mēs atsūtīsim tev pieteikšanās kodu. Parole nav vajadzīga.",
+    "getCode": "Saņemt kodu",
+    "codeSent": "Mēs nosūtījām kodu uz {{email}}. Vēstule var pienākt ne uzreiz, tāpēc pārbaudi arī surogātpasta mapi.",
+    "code": "Kods no vēstules",
+    "signIn": "Pieteikties",
+    "resend": "Nosūtīt jaunu kodu",
+    "resendIn": "Jauns kods pēc {{seconds}} s",
+    "changeEmail": "Izmantot citu e-pastu",
+    "errors": {
+      "invalidEmail": "Pārbaudi e-pasta adresi.",
+      "shortCode": "Ievadi visu kodu no vēstules.",
+      "codeInvalid": "Kods ir nepareizs vai novecojis. Pārbaudi to vai pieprasi jaunu.",
+      "tooManyRequests": "Pārāk daudz mēģinājumu. Pagaidi minūti un mēģini vēlreiz.",
+      "emailNotAllowed": "Uz šo adresi mēs vēl nevaram sūtīt vēstules."
+    }
+  },
+  "onboarding": {
+    "progress": "{{step}}. solis no {{total}}",
+    "signOut": "Iziet",
+    "about": {
+      "title": "Pirms sākam",
+      "birthDate": "Dzimšanas datums",
+      "day": "Diena",
+      "month": "Mēnesis",
+      "year": "Gads",
+      "birthDateHint": "Vibeish ir tikai pieaugušajiem. Tavu dzimšanas datumu neviens cits neredzēs.",
+      "rulesTitle": "Kopienas noteikumi",
+      "rules": {
+        "respect": "Izturies ar cieņu pret citiem: nekādu apvainojumu, ņirgāšanās vai diskriminācijas.",
+        "friendship": "Vibeish ir draudzībai un kopīgām nodarbēm. Bez reklāmas, surogātpasta un pārdošanas.",
+        "safety": "Satiecies ļaužu pilnās vietās, īpaši pirmajā reizē.",
+        "ai": "Sludinājumus, profilus un ziņas pārbauda mākslīgais intelekts. Noteikumu pārkāpumi tiek paslēpti, un par atkārtotiem pārkāpumiem konts tiek bloķēts.",
+        "report": "Ziņo par noteikumu pārkāpējiem un bloķē viņus. Tas vienmēr ir bez maksas."
+      },
+      "accept": "Piekrītu noteikumiem",
+      "errors": {
+        "invalidDate": "Pārbaudi datumu: dienu, mēnesi un gadu.",
+        "underage": "Atvaino, Vibeish ir tikai tiem, kam ir vismaz 18 gadu."
+      }
+    },
+    "profile": {
+      "title": "Par tevi",
+      "name": "Vārds",
+      "nameHint": "Tas būs redzams tavā profilā un sarunās. Pietiek ar vārdu.",
+      "languages": "Valodas, kurās runā",
+      "languagesHint": "Citi tās redzēs. Izvēlies visas, kas der.",
+      "errors": {
+        "name": "Ieraksti savu vārdu.",
+        "languages": "Izvēlies vismaz vienu valodu."
+      }
+    },
+    "city": {
+      "title": "Tava pilsēta",
+      "body": "Plūsmā redzēsi plānus no savas pilsētas.",
+      "notListed": "Manas pilsētas nav sarakstā",
+      "otherCity": "Kurā pilsētā tu dzīvo?",
+      "otherCityHint": "Tur mēs vēl nedarbojamies. Pierakstīsim tavu pilsētu, lai zinātu, kur paplašināties tālāk.",
+      "finish": "Pabeigt",
+      "errors": {
+        "city": "Izvēlies savu pilsētu.",
+        "otherCity": "Ieraksti savas pilsētas nosaukumu."
+      }
+    }
+  },
+  "city": {
+    "tallinn": "Tallina",
+    "tartu": "Tartu",
+    "helsinki": "Helsinki",
+    "riga": "Rīga",
+    "vilnius": "Viļņa"
+  },
+  "loadError": {
+    "title": "Neizdevās ielādēt profilu",
+    "body": "Pārbaudi interneta savienojumu un mēģini vēlreiz.",
+    "retry": "Mēģināt vēlreiz"
   }
 }

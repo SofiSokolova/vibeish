@@ -1,12 +1,16 @@
+import type { Href } from 'expo-router';
+
 /**
  * Bottom tabs, shared by the native tab bar (components/app-tabs.tsx) and the web one
- * (components/app-tabs.web.tsx). `name` is the route file in src/app, `label` a locale key,
- * `sf` SF Symbols for iOS and `md` Material Symbols for Android and web.
+ * (components/app-tabs.web.tsx). `name` is the route file in src/app/(app), `label` a locale
+ * key, `sf` SF Symbols for iOS and `md` Material Symbols for Android and web.
  */
 export const TABS = [
   {
     name: 'index',
-    href: '/',
+    // Typed by hand: on Windows, Expo Router's typed routes list (app)/index as `/index`
+    // instead of `/`, because the generator strips `/index` before it turns `\` into `/`.
+    href: '/' as Href,
     label: 'tabs.feed',
     sf: { default: 'rectangle.stack', selected: 'rectangle.stack.fill' },
     md: 'style',

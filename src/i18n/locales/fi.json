@@ -28,7 +28,9 @@
   "profile": {
     "title": "Profiili",
     "body": "Täällä voit hallita profiiliasi, harrastuksiasi ja asetuksiasi.",
-    "language": "Sovelluksen kieli"
+    "language": "Sovelluksen kieli",
+    "account": "Kirjautuneena: {{email}}",
+    "signOut": "Kirjaudu ulos"
   },
   "category": {
     "table_tennis": "Pöytätennis",
@@ -43,5 +45,94 @@
     "volleyball": "Lentopallo",
     "cycling": "Pyöräily",
     "language_exchange": "Kielivaihto"
+  },
+  "common": {
+    "back": "Takaisin",
+    "continue": "Jatka",
+    "errors": {
+      "generic": "Jokin meni pieleen. Yritä uudelleen.",
+      "network": "Ei yhteyttä. Tarkista internetyhteys ja yritä uudelleen."
+    }
+  },
+  "auth": {
+    "tagline": "Friends with no benefits",
+    "intro": "Löydä läheltäsi seuraa pelaamiseen, kävelyyn ja juttelemiseen.",
+    "language": "Kieli",
+    "email": "Sähköposti",
+    "emailHint": "Lähetämme sinulle kirjautumiskoodin. Salasanaa ei tarvita.",
+    "getCode": "Lähetä koodi",
+    "codeSent": "Lähetimme koodin osoitteeseen {{email}}. Viestin saapuminen voi kestää hetken, joten katso myös roskapostikansio.",
+    "code": "Koodi viestistä",
+    "signIn": "Kirjaudu sisään",
+    "resend": "Lähetä uusi koodi",
+    "resendIn": "Uusi koodi {{seconds}} s kuluttua",
+    "changeEmail": "Käytä toista sähköpostiosoitetta",
+    "errors": {
+      "invalidEmail": "Tarkista sähköpostiosoite.",
+      "shortCode": "Kirjoita koko koodi viestistä.",
+      "codeInvalid": "Koodi on väärä tai vanhentunut. Tarkista se tai pyydä uusi.",
+      "tooManyRequests": "Liian monta yritystä. Odota hetki ja yritä uudelleen.",
+      "emailNotAllowed": "Emme voi vielä lähettää viestejä tähän osoitteeseen."
+    }
+  },
+  "onboarding": {
+    "progress": "Vaihe {{step}}/{{total}}",
+    "signOut": "Kirjaudu ulos",
+    "about": {
+      "title": "Ennen kuin aloitetaan",
+      "birthDate": "Syntymäaika",
+      "day": "Päivä",
+      "month": "Kuukausi",
+      "year": "Vuosi",
+      "birthDateHint": "Vibeish on vain aikuisille. Kukaan muu ei näe syntymäaikaasi.",
+      "rulesTitle": "Yhteisön säännöt",
+      "rules": {
+        "respect": "Kunnioita muita: ei loukkauksia, kiusaamista eikä syrjintää.",
+        "friendship": "Vibeish on ystävyyttä ja yhteistä tekemistä varten. Ei mainoksia, roskapostia eikä myyntiä.",
+        "safety": "Tapaa vilkkailla julkisilla paikoilla, varsinkin ensimmäisellä kerralla.",
+        "ai": "Tekoäly tarkistaa ilmoitukset, profiilit ja viestit. Sääntöjä rikkova sisältö piilotetaan, ja toistuvista rikkeistä tili estetään.",
+        "report": "Ilmoita sääntöjen rikkojista ja estä heidät. Se on aina maksutonta."
+      },
+      "accept": "Hyväksyn säännöt",
+      "errors": {
+        "invalidDate": "Tarkista päivämäärä: päivä, kuukausi ja vuosi.",
+        "underage": "Valitettavasti Vibeish on vain 18 vuotta täyttäneille."
+      }
+    },
+    "profile": {
+      "title": "Sinusta",
+      "name": "Nimi",
+      "nameHint": "Näkyy profiilissasi ja keskusteluissa. Etunimi riittää.",
+      "languages": "Kielet, joita puhut",
+      "languagesHint": "Muut näkevät ne. Valitse kaikki sopivat.",
+      "errors": {
+        "name": "Kirjoita nimesi.",
+        "languages": "Valitse vähintään yksi kieli."
+      }
+    },
+    "city": {
+      "title": "Kaupunkisi",
+      "body": "Syötteessäsi näkyy suunnitelmia omasta kaupungistasi.",
+      "notListed": "Kaupunkini ei ole listalla",
+      "otherCity": "Missä kaupungissa asut?",
+      "otherCityHint": "Emme ole vielä siellä. Kirjaamme kaupunkisi ylös, jotta tiedämme, minne laajentaa seuraavaksi.",
+      "finish": "Valmis",
+      "errors": {
+        "city": "Valitse kaupunkisi.",
+        "otherCity": "Kirjoita kaupunkisi nimi."
+      }
+    }
+  },
+  "city": {
+    "tallinn": "Tallinna",
+    "tartu": "Tartto",
+    "helsinki": "Helsinki",
+    "riga": "Riika",
+    "vilnius": "Vilna"
+  },
+  "loadError": {
+    "title": "Profiilia ei voitu ladata",
+    "body": "Tarkista internetyhteys ja yritä uudelleen.",
+    "retry": "Yritä uudelleen"
   }
 }

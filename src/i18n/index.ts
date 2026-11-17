@@ -1,3 +1,6 @@
+// Provides localStorage on Android and iOS (the browser has its own); the language choice is kept there.
+import 'expo-sqlite/localStorage/install';
+
 import { getLocales } from 'expo-localization';
 import { createInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
@@ -48,11 +51,23 @@ export function detectDeviceLanguage(): AppLanguage {
   return 'en';
 }
 
+const LANGUAGE_KEY = 'vibeish.language';
+
+/** The language chosen earlier on this device, if any. */
+function readSavedLanguage(): AppLanguage | null {
+  try {
+    const saved = localStorage.getItem(LANGUAGE_KEY);
+    return isAppLanguage(saved) ? saved : null;
+  } catch {
+    return null;
+  }
+}
+
 const i18n = createInstance();
 
 void i18n.use(initReactI18next).init({
   resources,
-  lng: detectDeviceLanguage(),
+  lng: readSavedLanguage() ?? detectDeviceLanguage(),
   fallbackLng: 'en',
   supportedLngs: [...SUPPORTED_LANGUAGES],
   // React already escapes rendered strings.
@@ -60,5 +75,23 @@ void i18n.use(initReactI18next).init({
   // Translations are bundled with the app, so initialise synchronously and show translated text on the first frame.
   initAsync: false,
 });
+
+/**
+ * Switches the interface language and remembers the choice on this device. Signed-in
+ * users also get it saved to their profile (see lib/auth.tsx).
+ */
+export function setAppLanguage(language: AppLanguage) {
+  try {
+    localStorage.setItem(LANGUAGE_KEY, language);
+  } catch {
+    // Without storage the choice still applies until the app restarts.
+  }
+  void i18n.changeLanguage(language);
+}
+
+/** The interface language currently in use. */
+export function currentLanguage(): AppLanguage {
+  return isAppLanguage(i18n.resolvedLanguage) ? i18n.resolvedLanguage : 'en';
+}
 
 export default i18n;
