@@ -483,18 +483,21 @@ export type Database = {
         Row: {
           birth_date: string
           created_at: string
+          requested_city: string | null
           ui_language: string
           user_id: string
         }
         Insert: {
           birth_date: string
           created_at?: string
+          requested_city?: string | null
           ui_language?: string
           user_id: string
         }
         Update: {
           birth_date?: string
           created_at?: string
+          requested_city?: string | null
           ui_language?: string
           user_id?: string
         }
@@ -801,6 +804,7 @@ export type Database = {
           p_display_name: string
           p_home_city?: string
           p_languages?: string[]
+          p_requested_city?: string
           p_ui_language?: string
         }
         Returns: {

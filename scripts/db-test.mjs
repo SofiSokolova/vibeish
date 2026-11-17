@@ -44,6 +44,7 @@ const users = {
   dave: '00000000-0000-4000-8000-00000000000d', // admin
   erin: '00000000-0000-4000-8000-00000000000e', // banned
   teen: '00000000-0000-4000-8000-00000000000f', // 16 years old
+  frank: '00000000-0000-4000-8000-000000000010', // lives in a city that is not supported yet
 };
 
 // Kadriorg park, about 2 km from the centre of Tallinn.
@@ -157,6 +158,12 @@ await test('people under 18 cannot finish onboarding', () =>
   )
 );
 
+await test('signed-out visitors cannot finish onboarding', () =>
+  asAnon(() =>
+    fails(run(`select public.complete_onboarding('Anon', $1::date)`, [yearsAgo(30)]), /permission denied/)
+  )
+);
+
 await test('adults finish onboarding', async () => {
   for (const name of ['alice', 'bob', 'carol', 'dave', 'erin']) {
     const displayName = name[0].toUpperCase() + name.slice(1);
@@ -169,6 +176,35 @@ await test('adults finish onboarding', async () => {
   }
   const [{ count }] = await run('select count(*)::int as count from public.profiles');
   assert.equal(count, 5);
+});
+
+await test('people from a city that is not supported yet finish onboarding and keep it private', async () => {
+  await as('frank', () =>
+    run(`select public.complete_onboarding(' Frank ', $1::date, '{et}', null, 'et', '  Pärnu ')`, [
+      yearsAgo(25),
+    ])
+  );
+  const [frank] = await run(
+    `select p.display_name, p.home_city, pp.requested_city
+       from public.profiles p join public.profile_private pp on pp.user_id = p.id
+      where p.id = $1`,
+    [users.frank]
+  );
+  assert.deepEqual(frank, { display_name: 'Frank', home_city: null, requested_city: 'Pärnu' });
+  const seenByBob = await as('bob', () =>
+    run('select requested_city from public.profile_private where user_id = $1', [users.frank])
+  );
+  assert.equal(seenByBob.length, 0);
+});
+
+await test('a typed city is dropped when a city from the list is chosen', async () => {
+  // Onboard Carol again, this time with both a city from the list and a typed one.
+  await run('delete from public.profiles where id = $1', [users.carol]);
+  await as('carol', () =>
+    run(`select public.complete_onboarding('Carol', $1::date, '{en}', 'tallinn', 'en', 'Narva')`, [yearsAgo(30)])
+  );
+  const [carol] = await run('select requested_city from public.profile_private where user_id = $1', [users.carol]);
+  assert.equal(carol.requested_city, null);
 });
 
 // Done by hand in the dashboard in real life.
@@ -433,7 +469,7 @@ console.log('\nServer');
 await test('the server role reads and changes everything, including server-owned columns', async () => {
   await db.exec('set role service_role');
   try {
-    assert.equal((await run('select count(*)::int as count from public.profiles'))[0].count, 5);
+    assert.equal((await run('select count(*)::int as count from public.profiles'))[0].count, 6);
     await run(`update public.listings set moderation_status = 'rejected' where id = $1`, [listing.id]);
     await run('select private.is_admin()');
   } finally {
@@ -476,6 +512,18 @@ await test('categories match src/constants/categories.ts', async () => {
     (row) => `${row.slug} ${row.min_group}-${row.max_group}`
   );
   assert.ok(inApp.length > 0, 'no categories found in categories.ts');
+  assert.deepEqual(inDatabase, inApp);
+});
+
+await test('cities match src/constants/cities.ts', async () => {
+  const source = readFileSync(path.join(root, 'src', 'constants', 'cities.ts'), 'utf8');
+  const inApp = [...source.matchAll(/slug: '([a-z_]+)', country: '([A-Z]{2})'/g)].map(
+    ([, slug, country]) => `${slug} ${country}`
+  );
+  const inDatabase = (await run('select slug, country_code from public.cities order by sort_order')).map(
+    (row) => `${row.slug} ${row.country_code}`
+  );
+  assert.ok(inApp.length > 0, 'no cities found in cities.ts');
   assert.deepEqual(inDatabase, inApp);
 });
 
