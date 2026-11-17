@@ -24,8 +24,10 @@ An app and website for finding friends through shared activities. People swipe t
 ## Database
 
 - Every schema change is a new migration in `supabase/migrations` (`YYYYMMDDHHMMSS_name.sql`). Once a migration has been applied to a real Supabase project, never edit it; add a new one.
-- Every table has row level security. Clients get explicit table and column grants only (see the end of the initial migration); columns the server owns (moderation, counters, bans) are never granted.
-- Multi-step actions are `security definer` functions with `set search_path = ''` that check the caller themselves. When a policy needs to look at another table, it goes through a helper function such as `is_chat_member()`, so policies never call each other in a loop.
+- Every table has row level security. The Supabase project does not expose new tables automatically, so every migration that creates a table grants privileges explicitly: clients (`anon`, `authenticated`) get only the tables and columns they need, `service_role` gets everything. Columns the server owns (moderation, counters, bans) are never granted to clients.
+- Multi-step actions are `security definer` functions with `set search_path = ''` that check the caller themselves. When a policy needs to look at another table, it goes through a helper function such as `private.is_chat_member()`, so policies never call each other in a loop.
+- Everything in `public` is callable through the Data API. Only functions the app calls live there; policy helpers live in the `private` schema, which the API does not expose. Supabase's advisor warning "Signed-In Users Can Execute SECURITY DEFINER Function" is expected for the app-facing functions, which check the caller themselves.
+- After every migration: `npm run db:test`, `npm run db:push`, then `npm run db:types` to refresh `src/lib/database.types.ts`; check `npx supabase db advisors --remote`.
 - Reference data (categories, cities) lives in migrations. Categories must match `src/constants/categories.ts`.
 - Every new access rule gets a test in `scripts/db-test.mjs`, which runs the migrations in an in-memory Postgres (PGlite) with a stand-in for Supabase's auth schema.
 

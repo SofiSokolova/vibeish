@@ -33,10 +33,8 @@ const SUPABASE_STAND_IN = `
   grant usage on schema public, auth, extensions to anon, authenticated, service_role;
   grant execute on function auth.uid() to anon, authenticated, service_role;
 
-  -- Supabase's defaults: new objects in public are fully granted to the API roles.
-  alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
-  alter default privileges in schema public grant all on functions to anon, authenticated, service_role;
-  alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;
+  -- Like a project created with "Automatically expose new tables" turned off: new
+  -- tables get no privileges until a migration grants them.
 `;
 
 const users = {
@@ -429,6 +427,43 @@ await test('signed-out visitors see only categories and cities', () =>
     await fails(run('select id from public.listings'), /permission denied/);
   })
 );
+
+console.log('\nServer');
+
+await test('the server role reads and changes everything, including server-owned columns', async () => {
+  await db.exec('set role service_role');
+  try {
+    assert.equal((await run('select count(*)::int as count from public.profiles'))[0].count, 5);
+    await run(`update public.listings set moderation_status = 'rejected' where id = $1`, [listing.id]);
+    await run('select private.is_admin()');
+  } finally {
+    await db.exec('reset role');
+  }
+});
+
+await test('the API schema holds only the security definer functions the app calls', async () => {
+  // Helpers used by the access rules live in the private schema, which the Data API does not expose.
+  const rows = await run(`
+    select p.proname
+      from pg_proc p
+      join pg_namespace n on n.oid = p.pronamespace
+     where n.nspname = 'public' and p.prosecdef and p.prorettype <> 'trigger'::regtype
+     order by p.proname`);
+  assert.deepEqual(
+    rows.map((row) => row.proname),
+    [
+      'accept_application',
+      'admin_ban_user',
+      'admin_hide_message',
+      'admin_moderate_listing',
+      'admin_unban_user',
+      'complete_onboarding',
+      'decline_application',
+      'register_push_token',
+      'withdraw_application',
+    ]
+  );
+});
 
 console.log('\nConsistency with the app');
 

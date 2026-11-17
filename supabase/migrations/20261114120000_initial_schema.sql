@@ -873,12 +873,18 @@ $$;
 -- -----------------------------------------------------------------------------
 -- Privileges
 -- -----------------------------------------------------------------------------
--- Supabase grants everything to anon and authenticated by default. Take it all
--- back and grant only what the app needs; RLS policies below then decide which
--- rows each user can touch.
+-- Nothing is granted implicitly. A Supabase project may or may not expose new
+-- tables to the API roles by default ("Automatically expose new tables"), so this
+-- migration takes everything back and grants exactly what the app needs; RLS
+-- policies below then decide which rows each user can touch.
 
 revoke all on all tables in schema public from anon, authenticated;
 revoke execute on all functions in schema public from public, anon, authenticated;
+
+-- The server role is used only by Edge Functions and the dashboard, never shipped
+-- in the app. It bypasses RLS by design and needs full access to every table.
+grant all on all tables in schema public to service_role;
+grant execute on all functions in schema public to service_role;
 
 grant select on public.categories, public.cities to anon, authenticated;
 grant select on public.osm_places to authenticated;

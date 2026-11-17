@@ -37,6 +37,7 @@
     "@types/react": "~19.3.0",
     "eslint": "^9.0.0",
     "eslint-config-expo": "~58.0.4",
+    "supabase": "^3.1.0",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -47,7 +48,9 @@
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "i18n:check": "node ./scripts/check-i18n.js",
-    "db:test": "node ./scripts/db-test.mjs"
+    "db:test": "node ./scripts/db-test.mjs",
+    "db:push": "supabase db push --remote",
+    "db:types": "supabase gen types typescript --remote --schema public > src/lib/database.types.ts"
   },
   "private": true
 }
