@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { Button } from '@/components/button';
+import { CodeInput } from '@/components/code-input';
 import { LanguagePicker } from '@/components/language-picker';
 import { Screen } from '@/components/screen';
 import { TextField } from '@/components/text-field';
@@ -14,6 +15,11 @@ import { supabase } from '@/lib/supabase';
 
 /** Supabase lets people ask for a new code once a minute. */
 const RESEND_DELAY_SECONDS = 60;
+/**
+ * Digits in the emailed code. It must match the Supabase project setting "Email OTP length"
+ * (Authentication → Sign In / Providers → Email).
+ */
+const CODE_LENGTH = 8;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type ErrorKey = AuthErrorKey | 'auth.errors.shortCode';
@@ -60,14 +66,16 @@ export default function SignInScreen() {
     }
   }
 
-  async function submitCode() {
-    if (code.length < 6) {
+  /** Checks the code; runs on its own once the last digit is typed or pasted. */
+  async function submitCode(token = code) {
+    if (busy !== null) return;
+    if (token.length < CODE_LENGTH) {
       setError('auth.errors.shortCode');
       return;
     }
     setBusy('verifying');
     setError(null);
-    const { error: verifyError } = await supabase.auth.verifyOtp({ email, token: code, type: 'email' });
+    const { error: verifyError } = await supabase.auth.verifyOtp({ email, token, type: 'email' });
     if (verifyError) {
       setBusy(null);
       setError(authErrorKey(verifyError));
@@ -111,23 +119,18 @@ export default function SignInScreen() {
       ) : (
         <View style={styles.form}>
           <ThemedText themeColor="textSecondary">{t('auth.codeSent', { email })}</ThemedText>
-          <TextField
+          <CodeInput
             label={t('auth.code')}
+            length={CODE_LENGTH}
             error={error ? t(error) : null}
             value={code}
             onChangeText={(value) => {
-              setCode(value.replace(/\D/g, ''));
+              setCode(value);
               setError(null);
             }}
-            onSubmitEditing={() => void submitCode()}
+            onComplete={(value) => void submitCode(value)}
             editable={busy === null}
             autoFocus
-            autoComplete="one-time-code"
-            inputMode="numeric"
-            keyboardType="number-pad"
-            textContentType="oneTimeCode"
-            maxLength={10}
-            returnKeyType="done"
           />
           <Button title={t('auth.signIn')} loading={busy === 'verifying'} onPress={() => void submitCode()} />
           <View>
