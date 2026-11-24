@@ -4,7 +4,7 @@ Friends with no benefits. Find your people through the things you love doing: sw
 
 Expo (Android and web) · Supabase · interface in English, Estonian, Russian, Ukrainian, Finnish and Latvian.
 
-**Status:** early development. The app skeleton, translations and the database schema are done; sign-in and the swipe feed come next.
+**Status:** early development. The app skeleton, translations, database schema, sign-in with an email code and onboarding are done; listings and the swipe feed come next.
 
 ## What's inside
 
@@ -18,7 +18,7 @@ Requires Node.js 22.13 or newer (26 LTS recommended).
 
 ```bash
 npm install
-cp .env.example .env   # Supabase URL and publishable key; needed once sign-in is added
+cp .env.example .env   # Supabase URL and publishable key
 npx expo start         # press w for web, or scan the QR code with Expo Go
 ```
 
@@ -30,8 +30,6 @@ npx expo lint
 npm run i18n:check
 npm run db:test        # database schema and access rules, no Docker needed
 ```
-
-The product plan and decisions are in [docs/MVP.md](docs/MVP.md).
 
 ## License
 

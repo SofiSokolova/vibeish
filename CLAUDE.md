@@ -2,7 +2,7 @@
 
 # Vibeish
 
-An app and website for finding friends through shared activities. People swipe through activity listings near them ("table tennis on Saturday, one more player needed"), ask to join with a short note, and the listing's author picks who comes; the chosen people get a group chat. Product decisions and the MVP plan: [docs/MVP.md](docs/MVP.md).
+An app and website for finding friends through shared activities. People swipe through activity listings near them ("table tennis on Saturday, one more player needed"), ask to join with a short note, and the listing's author picks who comes; the chosen people get a group chat.
 
 ## Stack
 
