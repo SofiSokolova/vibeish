@@ -11,6 +11,7 @@ import {
 
 import { Button } from '@/components/button';
 import { Chip } from '@/components/chip';
+import { HobbyPicker, type HobbyChoices } from '@/components/hobby-picker';
 import { Screen } from '@/components/screen';
 import { TextField } from '@/components/text-field';
 import { ThemedText } from '@/components/themed-text';
@@ -23,7 +24,7 @@ import { useAuth } from '@/lib/auth';
 import { isNetworkFailure } from '@/lib/auth-errors';
 import { supabase } from '@/lib/supabase';
 
-const STEPS = ['about', 'profile', 'city'] as const;
+const STEPS = ['about', 'profile', 'hobbies', 'city'] as const;
 type Step = (typeof STEPS)[number];
 
 const RULES = ['respect', 'friendship', 'safety', 'ai', 'report'] as const;
@@ -45,8 +46,9 @@ type ErrorKey =
   | 'common.errors.generic';
 
 /**
- * Three steps after the first sign-in: date of birth and the rules, name and languages,
- * then the city. The profile is created only at the end, by complete_onboarding().
+ * Four steps after the first sign-in: date of birth and the rules, name and languages,
+ * hobbies with their levels (people may skip this one and add hobbies later), then the
+ * city. The profile and its hobbies are created only at the end, by complete_onboarding().
  */
 export default function OnboardingScreen() {
   const { t } = useTranslation();
@@ -59,6 +61,7 @@ export default function OnboardingScreen() {
   const [birthDate, setBirthDate] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [languages, setLanguages] = useState<string[]>(() => [currentLanguage()]);
+  const [hobbies, setHobbies] = useState<HobbyChoices>({});
   const [city, setCity] = useState<CitySlug | typeof OTHER_CITY | null>(null);
   const [otherCity, setOtherCity] = useState('');
   const [error, setError] = useState<ErrorKey | null>(null);
@@ -108,6 +111,11 @@ export default function OnboardingScreen() {
       return;
     }
     setError(null);
+    setStep('hobbies');
+  }
+
+  function continueFromHobbies() {
+    setError(null);
     setStep('city');
   }
 
@@ -135,6 +143,7 @@ export default function OnboardingScreen() {
       p_home_city: city === OTHER_CITY ? undefined : city,
       p_ui_language: currentLanguage(),
       p_requested_city: city === OTHER_CITY ? typedCity : undefined,
+      p_interests: Object.entries(hobbies).map(([category, level]) => ({ category, skill_level: level ?? null })),
     });
 
     // 23505: the profile already exists, so onboarding was finished before (say, on another device).
@@ -244,6 +253,19 @@ export default function OnboardingScreen() {
         </>
       ) : null}
 
+      {step === 'hobbies' ? (
+        <>
+          <ThemedText themeColor="textSecondary">{t('onboarding.hobbies.body')}</ThemedText>
+          <HobbyPicker
+            value={hobbies}
+            onChange={(value) => {
+              setHobbies(value);
+              setError(null);
+            }}
+          />
+        </>
+      ) : null}
+
       {step === 'city' ? (
         <>
           <ThemedText themeColor="textSecondary">{t('onboarding.city.body')}</ThemedText>
@@ -298,6 +320,12 @@ export default function OnboardingScreen() {
           <Button title={t('onboarding.about.accept')} onPress={continueFromAbout} />
         ) : step === 'profile' ? (
           <Button title={t('common.continue')} onPress={continueFromProfile} />
+        ) : step === 'hobbies' ? (
+          // With nothing chosen, the same button skips the step.
+          <Button
+            title={Object.keys(hobbies).length > 0 ? t('common.continue') : t('onboarding.hobbies.skip')}
+            onPress={continueFromHobbies}
+          />
         ) : (
           <Button title={t('onboarding.city.finish')} loading={saving} onPress={() => void finish()} />
         )}

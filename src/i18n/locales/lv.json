@@ -46,6 +46,27 @@
     "cycling": "Riteņbraukšana",
     "language_exchange": "Valodu apmaiņa"
   },
+  "skillLevel": {
+    "beginner": {
+      "title": "Tikai sāku",
+      "hint": "Mēģinu vai sāku nesen"
+    },
+    "experienced": {
+      "title": "Ir pieredze",
+      "hint": "Nodarbojos regulāri un pārliecinoši"
+    },
+    "pro": {
+      "title": "Profs",
+      "hint": "Treniņi, klubs, sacensības"
+    }
+  },
+  "hobbies": {
+    "levelQuestion": "Kāds ir tavs līmenis?",
+    "noLevel": "Bez līmeņa",
+    "remove": "Noņemt hobiju",
+    "withLevel": "{{hobby}}: {{level}}",
+    "opensLevels": "Atver līmeņa izvēli"
+  },
   "common": {
     "back": "Atpakaļ",
     "continue": "Tālāk",
@@ -109,6 +130,11 @@
         "name": "Ieraksti savu vārdu.",
         "languages": "Izvēlies vismaz vienu valodu."
       }
+    },
+    "hobbies": {
+      "title": "Ar ko tev patīk nodarboties?",
+      "body": "Pieskaries hobijam, lai norādītu savu līmeni: tā ir vieglāk atrast sava līmeņa kompāniju. Šo soli vari izlaist un pievienot hobijus vēlāk profilā.",
+      "skip": "Pagaidām izlaist"
     },
     "city": {
       "title": "Tava pilsēta",

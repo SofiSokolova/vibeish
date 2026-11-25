@@ -46,6 +46,27 @@
     "cycling": "Pyöräily",
     "language_exchange": "Kielivaihto"
   },
+  "skillLevel": {
+    "beginner": {
+      "title": "Vasta aloittelen",
+      "hint": "Kokeilen tai aloitin hiljattain"
+    },
+    "experienced": {
+      "title": "Kokemusta on",
+      "hint": "Harrastan säännöllisesti ja varmalla otteella"
+    },
+    "pro": {
+      "title": "Pro",
+      "hint": "Treenit, seura, kilpailut"
+    }
+  },
+  "hobbies": {
+    "levelQuestion": "Mikä on tasosi?",
+    "noLevel": "Ei tasoa",
+    "remove": "Poista harrastus",
+    "withLevel": "{{hobby}}: {{level}}",
+    "opensLevels": "Avaa tason valinnan"
+  },
   "common": {
     "back": "Takaisin",
     "continue": "Jatka",
@@ -109,6 +130,11 @@
         "name": "Kirjoita nimesi.",
         "languages": "Valitse vähintään yksi kieli."
       }
+    },
+    "hobbies": {
+      "title": "Mitä tykkäät tehdä?",
+      "body": "Napauta harrastusta ja lisää tasosi: niin löydät helpommin samantasoista seuraa. Voit ohittaa tämän vaiheen ja lisätä harrastukset myöhemmin profiilissasi.",
+      "skip": "Ohita toistaiseksi"
     },
     "city": {
       "title": "Kaupunkisi",

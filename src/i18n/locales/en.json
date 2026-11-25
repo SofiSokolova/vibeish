@@ -46,6 +46,27 @@
     "cycling": "Cycling",
     "language_exchange": "Language exchange"
   },
+  "skillLevel": {
+    "beginner": {
+      "title": "Just starting",
+      "hint": "Trying it out or started recently"
+    },
+    "experienced": {
+      "title": "Some experience",
+      "hint": "Doing it regularly and with confidence"
+    },
+    "pro": {
+      "title": "Pro",
+      "hint": "Training, a club, competitions"
+    }
+  },
+  "hobbies": {
+    "levelQuestion": "What's your level?",
+    "noLevel": "No level",
+    "remove": "Remove hobby",
+    "withLevel": "{{hobby}}: {{level}}",
+    "opensLevels": "Opens the choice of level"
+  },
   "common": {
     "back": "Back",
     "continue": "Continue",
@@ -109,6 +130,11 @@
         "name": "Enter your name.",
         "languages": "Choose at least one language."
       }
+    },
+    "hobbies": {
+      "title": "What do you love doing?",
+      "body": "Tap a hobby to add your level: it helps you find people at a similar level. You can skip this step and add hobbies later in your profile.",
+      "skip": "Skip for now"
     },
     "city": {
       "title": "Your city",

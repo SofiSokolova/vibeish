@@ -15,6 +15,13 @@ export const Colors = {
     backgroundSelected: '#E0E1E6',
     textSecondary: '#60646C',
     danger: '#C4320A',
+    /** Cards that float over the screen, like the level choice. */
+    popover: '#FFFFFF',
+    // Skill levels (see src/constants/skill-levels.ts). Dark enough to read on white and on
+    // backgroundElement; red is left out because it already means an error.
+    levelBeginner: '#16753F',
+    levelExperienced: '#8F5B00',
+    levelPro: '#6E45CC',
   },
   dark: {
     text: '#ffffff',
@@ -23,6 +30,10 @@ export const Colors = {
     backgroundSelected: '#2E3135',
     textSecondary: '#B0B4BA',
     danger: '#FF7A5C',
+    popover: '#1C1D20',
+    levelBeginner: '#4CC38A',
+    levelExperienced: '#F0B429',
+    levelPro: '#B69CFF',
   },
 } as const;
 

@@ -46,6 +46,27 @@
     "cycling": "Rattasõit",
     "language_exchange": "Keelevahetus"
   },
+  "skillLevel": {
+    "beginner": {
+      "title": "Alles alustan",
+      "hint": "Proovin järele või alustasin hiljuti"
+    },
+    "experienced": {
+      "title": "Kogemust on",
+      "hint": "Tegelen sellega regulaarselt ja enesekindlalt"
+    },
+    "pro": {
+      "title": "Proff",
+      "hint": "Treeningud, klubi, võistlused"
+    }
+  },
+  "hobbies": {
+    "levelQuestion": "Mis on sinu tase?",
+    "noLevel": "Ilma tasemeta",
+    "remove": "Eemalda hobi",
+    "withLevel": "{{hobby}}: {{level}}",
+    "opensLevels": "Avab taseme valiku"
+  },
   "common": {
     "back": "Tagasi",
     "continue": "Edasi",
@@ -109,6 +130,11 @@
         "name": "Kirjuta oma nimi.",
         "languages": "Vali vähemalt üks keel."
       }
+    },
+    "hobbies": {
+      "title": "Mida sulle meeldib teha?",
+      "body": "Puuduta hobi, et lisada oma tase: nii on lihtsam leida omal tasemel seltskonda. Võid selle sammu vahele jätta ja hobid hiljem profiilis lisada.",
+      "skip": "Jäta praegu vahele"
     },
     "city": {
       "title": "Sinu linn",
