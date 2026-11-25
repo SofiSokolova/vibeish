@@ -19,3 +19,8 @@ export const SPOKEN_LANGUAGES = [
 ] as const;
 
 export const MAX_SPOKEN_LANGUAGES = 10;
+
+/** The names of the given languages, in the order of the list above. */
+export function spokenLanguageNames(codes: readonly string[]): string[] {
+  return SPOKEN_LANGUAGES.filter((language) => codes.includes(language.code)).map((language) => language.name);
+}

@@ -10,27 +10,24 @@ import {
 } from 'react-native';
 
 import { Button } from '@/components/button';
-import { Chip } from '@/components/chip';
-import { HobbyPicker, type HobbyChoices } from '@/components/hobby-picker';
+import { CityPicker, OTHER_CITY, type CityChoice } from '@/components/city-picker';
+import { HobbyPicker } from '@/components/hobby-picker';
 import { Screen } from '@/components/screen';
+import { SpokenLanguagePicker } from '@/components/spoken-language-picker';
 import { TextField } from '@/components/text-field';
 import { ThemedText } from '@/components/themed-text';
-import { CITIES, type CitySlug } from '@/constants/cities';
-import { MAX_SPOKEN_LANGUAGES, SPOKEN_LANGUAGES } from '@/constants/languages';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { currentLanguage } from '@/i18n';
 import { useAuth } from '@/lib/auth';
 import { isNetworkFailure } from '@/lib/auth-errors';
+import { toInterestRows, type HobbyChoices } from '@/lib/hobbies';
 import { supabase } from '@/lib/supabase';
 
 const STEPS = ['about', 'profile', 'hobbies', 'city'] as const;
 type Step = (typeof STEPS)[number];
 
 const RULES = ['respect', 'friendship', 'safety', 'ai', 'report'] as const;
-
-/** The choice for people whose city is not in the list yet. */
-const OTHER_CITY = 'other';
 
 const ADULT_AGE = 18;
 const MAX_AGE = 120;
@@ -62,7 +59,7 @@ export default function OnboardingScreen() {
   const [name, setName] = useState('');
   const [languages, setLanguages] = useState<string[]>(() => [currentLanguage()]);
   const [hobbies, setHobbies] = useState<HobbyChoices>({});
-  const [city, setCity] = useState<CitySlug | typeof OTHER_CITY | null>(null);
+  const [city, setCity] = useState<CityChoice | null>(null);
   const [otherCity, setOtherCity] = useState('');
   const [error, setError] = useState<ErrorKey | null>(null);
   const [saving, setSaving] = useState(false);
@@ -143,7 +140,7 @@ export default function OnboardingScreen() {
       p_home_city: city === OTHER_CITY ? undefined : city,
       p_ui_language: currentLanguage(),
       p_requested_city: city === OTHER_CITY ? typedCity : undefined,
-      p_interests: Object.entries(hobbies).map(([category, level]) => ({ category, skill_level: level ?? null })),
+      p_interests: toInterestRows(hobbies),
     });
 
     // 23505: the profile already exists, so onboarding was finished before (say, on another device).
@@ -157,17 +154,6 @@ export default function OnboardingScreen() {
     } else {
       setError(isNetworkFailure(saveError) ? 'common.errors.network' : 'common.errors.generic');
     }
-  }
-
-  function toggleLanguage(code: string) {
-    setError(null);
-    setLanguages((chosen) =>
-      chosen.includes(code)
-        ? chosen.filter((language) => language !== code)
-        : chosen.length < MAX_SPOKEN_LANGUAGES
-          ? [...chosen, code]
-          : chosen
-    );
   }
 
   const errorText = error ? t(error) : null;
@@ -238,17 +224,13 @@ export default function OnboardingScreen() {
             <ThemedText type="small" themeColor="textSecondary">
               {t('onboarding.profile.languagesHint')}
             </ThemedText>
-            <View style={styles.options}>
-              {SPOKEN_LANGUAGES.map((language) => (
-                <Chip
-                  key={language.code}
-                  role="checkbox"
-                  label={language.name}
-                  selected={languages.includes(language.code)}
-                  onPress={() => toggleLanguage(language.code)}
-                />
-              ))}
-            </View>
+            <SpokenLanguagePicker
+              value={languages}
+              onChange={(value) => {
+                setLanguages(value);
+                setError(null);
+              }}
+            />
           </View>
         </>
       ) : null}
@@ -269,44 +251,21 @@ export default function OnboardingScreen() {
       {step === 'city' ? (
         <>
           <ThemedText themeColor="textSecondary">{t('onboarding.city.body')}</ThemedText>
-          <View accessibilityRole="radiogroup" accessibilityLabel={t('onboarding.city.title')} style={styles.options}>
-            {CITIES.map((option) => (
-              <Chip
-                key={option.slug}
-                label={t(`city.${option.slug}`)}
-                selected={city === option.slug}
-                onPress={() => {
-                  setCity(option.slug);
-                  setError(null);
-                }}
-              />
-            ))}
-            <Chip
-              label={t('onboarding.city.notListed')}
-              selected={city === OTHER_CITY}
-              onPress={() => {
-                setCity(OTHER_CITY);
-                setError(null);
-              }}
-            />
-          </View>
-          {city === OTHER_CITY ? (
-            <TextField
-              label={t('onboarding.city.otherCity')}
-              hint={t('onboarding.city.otherCityHint')}
-              error={otherCityError}
-              value={otherCity}
-              onChangeText={(value) => {
-                setOtherCity(value);
-                setError(null);
-              }}
-              maxLength={100}
-              autoFocus
-              autoCapitalize="words"
-              returnKeyType="done"
-              onSubmitEditing={() => void finish()}
-            />
-          ) : null}
+          <CityPicker
+            label={t('onboarding.city.title')}
+            city={city}
+            onChangeCity={(value) => {
+              setCity(value);
+              setError(null);
+            }}
+            otherCity={otherCity}
+            onChangeOtherCity={(value) => {
+              setOtherCity(value);
+              setError(null);
+            }}
+            otherCityError={otherCityError}
+            onSubmitOtherCity={() => void finish()}
+          />
         </>
       ) : null}
 
@@ -443,11 +402,6 @@ function ageOn(birthDate: string, today: Date): number {
 
 const styles = StyleSheet.create({
   group: {
-    gap: Spacing.two,
-  },
-  options: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: Spacing.two,
   },
   rule: {

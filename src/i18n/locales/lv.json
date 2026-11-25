@@ -27,10 +27,29 @@
   },
   "profile": {
     "title": "Profils",
-    "body": "Šeit varēsi pārvaldīt savu profilu, hobijus un iestatījumus.",
     "language": "Lietotnes valoda",
     "account": "Konts: {{email}}",
-    "signOut": "Iziet"
+    "signOut": "Iziet",
+    "edit": "Rediģēt profilu",
+    "about": "Par mani",
+    "aboutEmpty": "Šeit vēl nekā nav.",
+    "hobbies": "Hobiji",
+    "hobbiesEmpty": "Hobiji vēl nav izvēlēti.",
+    "settings": "Iestatījumi"
+  },
+  "editProfile": {
+    "title": "Profila rediģēšana",
+    "about": "Par tevi",
+    "aboutHint": "Daži vārdi par sevi: kas tev patīk un kādu kompāniju meklē.",
+    "hobbiesHint": "Atzīmē visus hobijus, kas tev patīk.",
+    "levelsHint": "Pieskaries hobijam, lai izvēlētos savu līmeni.",
+    "change": "Mainīt",
+    "choose": "Izvēlēties",
+    "changeLanguages": "Mainīt valodas",
+    "changeHobbies": "Mainīt hobijus",
+    "changeCity": "Mainīt pilsētu",
+    "save": "Saglabāt",
+    "cancel": "Atcelt"
   },
   "category": {
     "table_tennis": "Galda teniss",
@@ -70,6 +89,7 @@
   "common": {
     "back": "Atpakaļ",
     "continue": "Tālāk",
+    "done": "Gatavs",
     "errors": {
       "generic": "Kaut kas nogāja greizi. Mēģini vēlreiz.",
       "network": "Nav savienojuma. Pārbaudi internetu un mēģini vēlreiz."

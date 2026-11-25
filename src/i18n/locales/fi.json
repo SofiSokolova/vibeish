@@ -27,10 +27,29 @@
   },
   "profile": {
     "title": "Profiili",
-    "body": "Täällä voit hallita profiiliasi, harrastuksiasi ja asetuksiasi.",
     "language": "Sovelluksen kieli",
     "account": "Kirjautuneena: {{email}}",
-    "signOut": "Kirjaudu ulos"
+    "signOut": "Kirjaudu ulos",
+    "edit": "Muokkaa profiilia",
+    "about": "Minusta",
+    "aboutEmpty": "Täällä ei ole vielä mitään.",
+    "hobbies": "Harrastukset",
+    "hobbiesEmpty": "Harrastuksia ei ole vielä valittu.",
+    "settings": "Asetukset"
+  },
+  "editProfile": {
+    "title": "Profiilin muokkaus",
+    "about": "Sinusta",
+    "aboutHint": "Muutama sana itsestäsi: mistä tykkäät ja millaista seuraa etsit.",
+    "hobbiesHint": "Valitse kaikki harrastukset, joista tykkäät.",
+    "levelsHint": "Napauta harrastusta ja valitse tasosi.",
+    "change": "Muuta",
+    "choose": "Valitse",
+    "changeLanguages": "Muuta kieliä",
+    "changeHobbies": "Muuta harrastuksia",
+    "changeCity": "Vaihda kaupunkia",
+    "save": "Tallenna",
+    "cancel": "Peruuta"
   },
   "category": {
     "table_tennis": "Pöytätennis",
@@ -70,6 +89,7 @@
   "common": {
     "back": "Takaisin",
     "continue": "Jatka",
+    "done": "Valmis",
     "errors": {
       "generic": "Jokin meni pieleen. Yritä uudelleen.",
       "network": "Ei yhteyttä. Tarkista internetyhteys ja yritä uudelleen."

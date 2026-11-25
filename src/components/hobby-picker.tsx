@@ -10,9 +10,7 @@ import { CATEGORIES, hasSkillLevels, type CategorySlug } from '@/constants/categ
 import { SKILL_LEVELS, skillLevelInfo, type SkillLevel } from '@/constants/skill-levels';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
-
-/** The chosen hobbies, each with a skill level, or null when the person gives none. */
-export type HobbyChoices = Partial<Record<CategorySlug, SkillLevel | null>>;
+import type { HobbyChoices } from '@/lib/hobbies';
 
 type OpenCard = {
   slug: CategorySlug;
@@ -22,13 +20,26 @@ type OpenCard = {
 };
 
 /**
- * Every hobby as a chip. A press picks the hobby and opens a card over the screen to choose
- * a level; a hobby with a level takes on the level's color and dots. Hobbies without levels,
+ * - `pick`: every hobby; a press picks it and opens the level card (onboarding).
+ * - `levels`: only the chosen hobbies; a press opens the level card (the profile editor).
+ * - `toggle`: every hobby; a press switches it on or off, with no level card, so the
+ *   picker also works inside a dialog without a window over a window.
+ */
+export type HobbyPickerMode = 'pick' | 'levels' | 'toggle';
+
+type HobbyPickerProps = {
+  value: HobbyChoices;
+  onChange: (value: HobbyChoices) => void;
+  mode?: HobbyPickerMode;
+};
+
+/**
+ * Hobbies as chips. The level is chosen in a card that opens over the screen next to the
+ * hobby; a hobby with a level takes on the level's color and dots. Hobbies without levels,
  * like language exchange, are simply switched on and off.
  */
-export function HobbyPicker({ value, onChange }: { value: HobbyChoices; onChange: (value: HobbyChoices) => void }) {
+export function HobbyPicker({ value, onChange, mode = 'pick' }: HobbyPickerProps) {
   const { t } = useTranslation();
-  const theme = useTheme();
   const screen = useWindowDimensions();
   const chips = useRef(new Map<CategorySlug, ViewInstance>());
   const [card, setCard] = useState<OpenCard | null>(null);
@@ -36,6 +47,8 @@ export function HobbyPicker({ value, onChange }: { value: HobbyChoices; onChange
   // After a resize or a rotation the hobby is somewhere else, so the card would point at the wrong place.
   const cardOpen =
     cardVisible && card !== null && card.screen.width === screen.width && card.screen.height === screen.height;
+  const shown = mode === 'levels' ? CATEGORIES.filter(({ slug }) => slug in value) : CATEGORIES;
+  const opensLevels = (slug: CategorySlug) => mode !== 'toggle' && hasSkillLevels(slug);
 
   function setLevel(slug: CategorySlug, level: SkillLevel | null) {
     onChange({ ...value, [slug]: level });
@@ -48,7 +61,7 @@ export function HobbyPicker({ value, onChange }: { value: HobbyChoices; onChange
   }
 
   function pressHobby(slug: CategorySlug) {
-    if (!hasSkillLevels(slug)) {
+    if (!opensLevels(slug)) {
       if (slug in value) removeHobby(slug);
       else setLevel(slug, null);
       return;
@@ -67,8 +80,11 @@ export function HobbyPicker({ value, onChange }: { value: HobbyChoices; onChange
 
   return (
     <View style={styles.picker}>
+      {/* Above the hobbies, next to the instruction that comes before the picker. */}
+      {shown.some(({ slug }) => opensLevels(slug)) ? <SkillLevelLegend /> : null}
+
       <View style={styles.chips}>
-        {CATEGORIES.map(({ slug }) => (
+        {shown.map(({ slug }) => (
           <HobbyChip
             key={slug}
             ref={(node) => {
@@ -80,22 +96,14 @@ export function HobbyPicker({ value, onChange }: { value: HobbyChoices; onChange
             label={t(`category.${slug}`)}
             picked={slug in value}
             level={value[slug] ?? null}
-            opensLevels={hasSkillLevels(slug)}
+            opensLevels={opensLevels(slug)}
+            // Among chosen hobbies only, a check mark says nothing new; a hobby without levels
+            // is removed in the list of all hobbies instead.
+            showCheck={mode !== 'levels'}
+            pressable={mode !== 'levels' || opensLevels(slug)}
             expanded={cardOpen && card.slug === slug}
             onPress={() => pressHobby(slug)}
           />
-        ))}
-      </View>
-
-      {/* What the colors mean. Screen readers hear the level in each hobby's name instead. */}
-      <View aria-hidden style={styles.legend}>
-        {SKILL_LEVELS.map((level) => (
-          <View key={level.value} style={styles.legendItem}>
-            <SkillLevelDots level={level.value} color={theme[level.color]} />
-            <ThemedText type="small" style={{ color: theme[level.color] }}>
-              {t(`skillLevel.${level.slug}.title`)}
-            </ThemedText>
-          </View>
         ))}
       </View>
 
@@ -119,6 +127,63 @@ export function HobbyPicker({ value, onChange }: { value: HobbyChoices; onChange
   );
 }
 
+/** The chosen hobbies as read-only tags, each in its level's color, as on the profile screen. */
+export function HobbyTags({ hobbies }: { hobbies: HobbyChoices }) {
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const chosen = CATEGORIES.filter(({ slug }) => slug in hobbies);
+  const anyLevel = chosen.some(({ slug }) => hobbies[slug] != null);
+
+  return (
+    <View style={styles.picker}>
+      {anyLevel ? <SkillLevelLegend /> : null}
+      <View role="list" style={styles.chips}>
+        {chosen.map(({ slug }) => {
+          const level = hobbies[slug] ?? null;
+          const info = level === null ? null : skillLevelInfo(level);
+          const levelColor = info ? theme[info.color] : null;
+          const label = t(`category.${slug}`);
+          return (
+            <View
+              key={slug}
+              role="listitem"
+              aria-label={info ? t('hobbies.withLevel', { hobby: label, level: t(`skillLevel.${info.slug}.title`) }) : label}
+              style={[
+                styles.chip,
+                {
+                  backgroundColor: levelColor ? 'transparent' : theme.backgroundElement,
+                  borderColor: levelColor ?? 'transparent',
+                },
+              ]}>
+              <ThemedText style={{ color: levelColor ?? theme.text }}>{label}</ThemedText>
+              {info && levelColor ? <SkillLevelDots level={info.value} color={levelColor} /> : null}
+            </View>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+/** What the level colors mean. Screen readers hear the level in each hobby's name instead. */
+export function SkillLevelLegend() {
+  const { t } = useTranslation();
+  const theme = useTheme();
+
+  return (
+    <View aria-hidden style={styles.legend}>
+      {SKILL_LEVELS.map((level) => (
+        <View key={level.value} style={styles.legendItem}>
+          <SkillLevelDots level={level.value} color={theme[level.color]} />
+          <ThemedText type="small" style={{ color: theme[level.color] }}>
+            {t(`skillLevel.${level.slug}.title`)}
+          </ThemedText>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 type HobbyChipProps = {
   ref: Ref<ViewInstance>;
   label: string;
@@ -126,17 +191,45 @@ type HobbyChipProps = {
   level: SkillLevel | null;
   /** Whether a press opens the level choice; otherwise it switches the hobby on and off. */
   opensLevels: boolean;
+  /** Whether a picked hobby without a level shows a check mark. */
+  showCheck: boolean;
+  /** False for a chip that only shows the hobby. */
+  pressable: boolean;
   expanded: boolean;
   onPress: () => void;
 };
 
-function HobbyChip({ ref, label, picked, level, opensLevels, expanded, onPress }: HobbyChipProps) {
+function HobbyChip({ ref, label, picked, level, opensLevels, showCheck, pressable, expanded, onPress }: HobbyChipProps) {
   const { t } = useTranslation();
   const theme = useTheme();
   const info = level === null ? null : skillLevelInfo(level);
   const levelColor = info ? theme[info.color] : null;
   const textColor = levelColor ?? (picked ? theme.text : theme.textSecondary);
   const levelName = info ? t(`skillLevel.${info.slug}.title`) : t('hobbies.noLevel');
+  const name = picked && (opensLevels || info) ? t('hobbies.withLevel', { hobby: label, level: levelName }) : label;
+  const chipStyle = [
+    styles.chip,
+    {
+      // A hobby with a level is outlined in the level's color; one without is filled like other chosen chips.
+      backgroundColor: levelColor ? 'transparent' : picked ? theme.backgroundSelected : theme.backgroundElement,
+      borderColor: levelColor ?? (picked ? theme.text : 'transparent'),
+    },
+  ];
+  const content = (
+    <>
+      {showCheck && picked && !info ? <ThemedText style={{ color: textColor }}>✓</ThemedText> : null}
+      <ThemedText style={{ color: textColor }}>{label}</ThemedText>
+      {info && levelColor ? <SkillLevelDots level={info.value} color={levelColor} /> : null}
+    </>
+  );
+
+  if (!pressable) {
+    return (
+      <View ref={ref} aria-label={name} style={chipStyle}>
+        {content}
+      </View>
+    );
+  }
 
   return (
     <Pressable
@@ -144,21 +237,11 @@ function HobbyChip({ ref, label, picked, level, opensLevels, expanded, onPress }
       role={opensLevels ? 'button' : 'checkbox'}
       aria-checked={opensLevels ? undefined : picked}
       aria-expanded={opensLevels ? expanded : undefined}
-      aria-label={opensLevels && picked ? t('hobbies.withLevel', { hobby: label, level: levelName }) : label}
+      aria-label={name}
       accessibilityHint={opensLevels ? t('hobbies.opensLevels') : undefined}
       onPress={onPress}
-      style={({ pressed }) => [
-        styles.chip,
-        {
-          // A hobby with a level is outlined in the level's color; one without is filled like other chosen chips.
-          backgroundColor: levelColor ? 'transparent' : picked ? theme.backgroundSelected : theme.backgroundElement,
-          borderColor: levelColor ?? (picked ? theme.text : 'transparent'),
-        },
-        pressed && styles.pressed,
-      ]}>
-      {picked && !info ? <ThemedText style={{ color: textColor }}>✓</ThemedText> : null}
-      <ThemedText style={{ color: textColor }}>{label}</ThemedText>
-      {info && levelColor ? <SkillLevelDots level={info.value} color={levelColor} /> : null}
+      style={({ pressed }) => [...chipStyle, pressed && styles.pressed]}>
+      {content}
     </Pressable>
   );
 }

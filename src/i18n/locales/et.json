@@ -27,10 +27,29 @@
   },
   "profile": {
     "title": "Profiil",
-    "body": "Siin saad hallata oma profiili, hobisid ja seadeid.",
     "language": "Rakenduse keel",
     "account": "Konto: {{email}}",
-    "signOut": "Logi välja"
+    "signOut": "Logi välja",
+    "edit": "Muuda profiili",
+    "about": "Minust",
+    "aboutEmpty": "Siin pole veel midagi.",
+    "hobbies": "Hobid",
+    "hobbiesEmpty": "Hobisid pole veel valitud.",
+    "settings": "Seaded"
+  },
+  "editProfile": {
+    "title": "Profiili muutmine",
+    "about": "Sinust",
+    "aboutHint": "Paar sõna endast: mis sulle meeldib ja millist seltskonda otsid.",
+    "hobbiesHint": "Märgi kõik hobid, mis sulle meeldivad.",
+    "levelsHint": "Puuduta hobi, et valida oma tase.",
+    "change": "Muuda",
+    "choose": "Vali",
+    "changeLanguages": "Muuda keeli",
+    "changeHobbies": "Muuda hobisid",
+    "changeCity": "Muuda linna",
+    "save": "Salvesta",
+    "cancel": "Tühista"
   },
   "category": {
     "table_tennis": "Lauatennis",
@@ -70,6 +89,7 @@
   "common": {
     "back": "Tagasi",
     "continue": "Edasi",
+    "done": "Valmis",
     "errors": {
       "generic": "Midagi läks valesti. Proovi uuesti.",
       "network": "Ühendus puudub. Kontrolli internetti ja proovi uuesti."

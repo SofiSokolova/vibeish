@@ -33,7 +33,19 @@ export function Chip({ label, selected, onPress, role = 'radio' }: ChipProps) {
   );
 }
 
+/** A chosen option shown on its own, without the other options, as in the profile editor. */
+export function Tag({ label }: { label: string }) {
+  return (
+    <ThemedView type="backgroundElement" style={[styles.chip, styles.tag]}>
+      <ThemedText>{label}</ThemedText>
+    </ThemedView>
+  );
+}
+
 const styles = StyleSheet.create({
+  tag: {
+    borderColor: 'transparent',
+  },
   chip: {
     paddingVertical: Spacing.two,
     paddingHorizontal: Spacing.three,

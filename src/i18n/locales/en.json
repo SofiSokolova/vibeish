@@ -27,10 +27,29 @@
   },
   "profile": {
     "title": "Profile",
-    "body": "This is where you'll manage your profile, hobbies and settings.",
     "language": "App language",
     "account": "Signed in as {{email}}",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "edit": "Edit profile",
+    "about": "About me",
+    "aboutEmpty": "Nothing here yet.",
+    "hobbies": "Hobbies",
+    "hobbiesEmpty": "No hobbies chosen yet.",
+    "settings": "Settings"
+  },
+  "editProfile": {
+    "title": "Edit profile",
+    "about": "About you",
+    "aboutHint": "A few words about yourself: what you enjoy and what company you are looking for.",
+    "hobbiesHint": "Pick every hobby you enjoy.",
+    "levelsHint": "Tap a hobby to set your level.",
+    "change": "Change",
+    "choose": "Choose",
+    "changeLanguages": "Change languages",
+    "changeHobbies": "Change hobbies",
+    "changeCity": "Change city",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "category": {
     "table_tennis": "Table tennis",
@@ -70,6 +89,7 @@
   "common": {
     "back": "Back",
     "continue": "Continue",
+    "done": "Done",
     "errors": {
       "generic": "Something went wrong. Please try again.",
       "network": "No connection. Check your internet and try again."
