@@ -39,3 +39,13 @@ Docs: https://docs.expo.dev/eas/index.md
 - If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
 - Expo Go only includes its bundled native modules. After adding a library with native code, the app needs a development build: `npx expo run:ios|android` locally, or `eas build --profile development`.
 - Prefer recommended Expo modules over third-party libraries, and check your available skills before adding dependencies. Docs: https://docs.expo.dev/versions/latest/index.md
+
+## What goes to remote repositories
+
+Any remote repository, GitHub or another, gets only what is needed to build, run, test and work on the code: source code, configuration (including the shared editor and agent settings in `.vscode/` and `.claude/`), migrations, scripts, assets, lockfiles, and documentation of the code (README, AGENTS.md, CLAUDE.md).
+
+Everything else stays on the local machine and is never committed: plans and roadmaps, product decisions, diaries, journals and work logs, session notes, scratch files and screenshots, and instructions for agents that are not about the code, such as personal preferences and workflow notes (Claude Code keeps those in `CLAUDE.local.md`).
+
+- Keep local files out of git with `.git/info/exclude`, not `.gitignore`: `.gitignore` is pushed too and would publish their names.
+- Before each commit, look through the staged files and leave out anything from the list above. If it is unclear whether a file belongs, ask.
+- To make a file that is already in the repository local, run `git rm --cached <file>` and add it to `.git/info/exclude`. Its old versions stay in the history, and git can overwrite or delete the local copy when switching branches or merging across that change, so back it up first.
