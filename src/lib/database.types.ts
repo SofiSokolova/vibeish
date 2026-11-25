@@ -803,6 +803,7 @@ export type Database = {
           p_birth_date: string
           p_display_name: string
           p_home_city?: string
+          p_interests?: Json
           p_languages?: string[]
           p_requested_city?: string
           p_ui_language?: string

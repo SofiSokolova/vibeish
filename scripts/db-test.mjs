@@ -45,6 +45,8 @@ const users = {
   erin: '00000000-0000-4000-8000-00000000000e', // banned
   teen: '00000000-0000-4000-8000-00000000000f', // 16 years old
   frank: '00000000-0000-4000-8000-000000000010', // lives in a city that is not supported yet
+  grace: '00000000-0000-4000-8000-000000000011', // picks hobbies during onboarding
+  henry: '00000000-0000-4000-8000-000000000012', // sends a wrong list of hobbies
 };
 
 // Kadriorg park, about 2 km from the centre of Tallinn.
@@ -206,6 +208,66 @@ await test('a typed city is dropped when a city from the list is chosen', async 
   const [carol] = await run('select requested_city from public.profile_private where user_id = $1', [users.carol]);
   assert.equal(carol.requested_city, null);
 });
+
+await test('hobbies are saved with the profile, each with an optional level', async () => {
+  await as('grace', () =>
+    run(`select public.complete_onboarding('Grace', $1::date, '{en}', 'tallinn', 'en', null, $2::jsonb)`, [
+      yearsAgo(28),
+      JSON.stringify([
+        { category: 'tennis', skill_level: 2 },
+        { category: 'chess', skill_level: 3 },
+        { category: 'language_exchange' },
+      ]),
+    ])
+  );
+  const rows = await run(
+    'select category, skill_level from public.user_interests where user_id = $1 order by category',
+    [users.grace]
+  );
+  assert.deepEqual(rows, [
+    { category: 'chess', skill_level: 3 },
+    { category: 'language_exchange', skill_level: null },
+    { category: 'tennis', skill_level: 2 },
+  ]);
+});
+
+await test('a wrong list of hobbies stops onboarding and leaves nothing behind', async () => {
+  const onboardHenry = (interests) =>
+    as('henry', () =>
+      run(`select public.complete_onboarding('Henry', $1::date, '{en}', 'tallinn', 'en', null, $2::jsonb)`, [
+        yearsAgo(40),
+        JSON.stringify(interests),
+      ])
+    );
+  await fails(onboardHenry([{ category: 'skydiving' }]), /unknown_category/);
+  await fails(onboardHenry([{ category: 'tennis' }, { category: 'tennis', skill_level: 1 }]), /duplicate_interest/);
+  await fails(onboardHenry([{ category: 'tennis', skill_level: 4 }]), /skill_level/);
+  // A hobby that has been switched off cannot be picked either.
+  await run(`update public.categories set is_active = false where slug = 'football'`);
+  try {
+    await fails(onboardHenry([{ category: 'football' }]), /unknown_category/);
+  } finally {
+    await run(`update public.categories set is_active = true where slug = 'football'`);
+  }
+  assert.equal((await run('select id from public.profiles where id = $1', [users.henry])).length, 0);
+  assert.equal((await run('select category from public.user_interests where user_id = $1', [users.henry])).length, 0);
+});
+
+await test('others see hobbies and their levels', async () => {
+  const rows = await as('bob', () =>
+    run('select category, skill_level from public.user_interests where user_id = $1', [users.grace])
+  );
+  assert.equal(rows.length, 3);
+});
+
+await test("users cannot add hobbies to someone else's profile", () =>
+  as('bob', () =>
+    fails(
+      run(`insert into public.user_interests (user_id, category) values ($1, 'football')`, [users.grace]),
+      /permission denied/
+    )
+  )
+);
 
 // Done by hand in the dashboard in real life.
 await run('insert into public.admins (user_id) values ($1)', [users.dave]);
@@ -469,7 +531,7 @@ console.log('\nServer');
 await test('the server role reads and changes everything, including server-owned columns', async () => {
   await db.exec('set role service_role');
   try {
-    assert.equal((await run('select count(*)::int as count from public.profiles'))[0].count, 6);
+    assert.equal((await run('select count(*)::int as count from public.profiles'))[0].count, 7);
     await run(`update public.listings set moderation_status = 'rejected' where id = $1`, [listing.id]);
     await run('select private.is_admin()');
   } finally {
