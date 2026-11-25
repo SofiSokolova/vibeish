@@ -19,8 +19,9 @@ export function Chip({ label, selected, onPress, role = 'radio' }: ChipProps) {
 
   return (
     <Pressable
-      accessibilityRole={role}
-      accessibilityState={{ checked: selected }}
+      // aria-* rather than accessibilityState, which React Native for Web no longer reads.
+      role={role}
+      aria-checked={selected}
       onPress={onPress}
       style={({ pressed }) => pressed && styles.pressed}>
       <ThemedView

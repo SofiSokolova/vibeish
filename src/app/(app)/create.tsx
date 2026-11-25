@@ -24,8 +24,8 @@ export default function CreateScreen() {
           return (
             <Pressable
               key={category.slug}
-              accessibilityRole="radio"
-              accessibilityState={{ checked: isSelected }}
+              role="radio"
+              aria-checked={isSelected}
               onPress={() => setSelected(category.slug)}
               style={({ pressed }) => pressed && styles.pressed}>
               <ThemedView

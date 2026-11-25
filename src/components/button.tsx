@@ -24,7 +24,8 @@ export function Button({ title, variant = 'primary', loading = false, disabled, 
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={title}
-      accessibilityState={{ disabled: inactive, busy: loading }}
+      aria-disabled={inactive}
+      aria-busy={loading}
       disabled={inactive}
       style={({ pressed }) => [
         variant === 'link' ? styles.link : styles.button,
