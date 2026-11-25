@@ -870,6 +870,32 @@ export type Database = {
         Args: { p_direction: string; p_listing_id: string; p_note?: string }
         Returns: undefined
       }
+      update_profile: {
+        Args: {
+          p_bio?: string
+          p_display_name: string
+          p_home_city?: string
+          p_interests?: Json
+          p_languages?: string[]
+          p_requested_city?: string
+        }
+        Returns: {
+          avatar_path: string | null
+          bio: string
+          created_at: string
+          display_name: string
+          home_city: string | null
+          id: string
+          languages: string[]
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       withdraw_application: {
         Args: { p_application_id: string }
         Returns: undefined

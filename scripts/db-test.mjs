@@ -269,6 +269,75 @@ await test("users cannot add hobbies to someone else's profile", () =>
   )
 );
 
+await test('people edit their profile and hobbies in one step', async () => {
+  await as('grace', () =>
+    run(`select public.update_profile(' Grace H. ', ' Tennis twice a week ', '{en,et}', 'tartu', null, $1::jsonb)`, [
+      JSON.stringify([{ category: 'tennis', skill_level: 3 }, { category: 'running' }]),
+    ])
+  );
+  const [grace] = await run('select display_name, bio, languages, home_city from public.profiles where id = $1', [
+    users.grace,
+  ]);
+  assert.deepEqual(grace, {
+    display_name: 'Grace H.',
+    bio: 'Tennis twice a week',
+    languages: ['en', 'et'],
+    home_city: 'tartu',
+  });
+  // Chess and language exchange are gone, tennis has a new level, running is new.
+  const interests = await run(
+    'select category, skill_level from public.user_interests where user_id = $1 order by category',
+    [users.grace]
+  );
+  assert.deepEqual(interests, [
+    { category: 'running', skill_level: null },
+    { category: 'tennis', skill_level: 3 },
+  ]);
+});
+
+await test('a city that is not supported yet can be chosen in the profile', async () => {
+  const save = (city, typedCity) =>
+    as('grace', () =>
+      run(`select public.update_profile('Grace H.', '', '{en}', $1, $2, '[]'::jsonb)`, [city, typedCity])
+    );
+  const cities = () =>
+    run(
+      `select p.home_city, pp.requested_city
+         from public.profiles p join public.profile_private pp on pp.user_id = p.id
+        where p.id = $1`,
+      [users.grace]
+    );
+  await save(null, ' Narva ');
+  assert.deepEqual((await cities())[0], { home_city: null, requested_city: 'Narva' });
+  await save('tallinn', 'Narva');
+  assert.deepEqual((await cities())[0], { home_city: 'tallinn', requested_city: null });
+});
+
+await test('a wrong list of hobbies leaves the profile as it was', async () => {
+  await fails(
+    as('grace', () =>
+      run(`select public.update_profile('Changed', '', '{en}', 'tallinn', null, $1::jsonb)`, [
+        JSON.stringify([{ category: 'skydiving' }]),
+      ])
+    ),
+    /unknown_category/
+  );
+  const [grace] = await run('select display_name from public.profiles where id = $1', [users.grace]);
+  assert.equal(grace.display_name, 'Grace H.');
+});
+
+await test('editing a profile changes only your own', async () => {
+  await as('bob', () => run(`select public.update_profile('Bob', 'Hi', '{en,ru}', 'tallinn', null, '[]'::jsonb)`));
+  const [bob] = await run('select bio from public.profiles where id = $1', [users.bob]);
+  assert.equal(bob.bio, 'Hi');
+  const [grace] = await run('select display_name, bio from public.profiles where id = $1', [users.grace]);
+  assert.deepEqual(grace, { display_name: 'Grace H.', bio: '' });
+});
+
+await test('signed-out visitors cannot edit profiles', () =>
+  asAnon(() => fails(run(`select public.update_profile('Anon')`), /permission denied/))
+);
+
 // Done by hand in the dashboard in real life.
 await run('insert into public.admins (user_id) values ($1)', [users.dave]);
 await run(`insert into public.user_bans (user_id, reason) values ($1, 'Spam')`, [users.erin]);
