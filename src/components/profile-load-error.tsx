@@ -10,7 +10,7 @@ export function ProfileLoadError() {
   const { isRetrying, reloadProfile, signOut } = useAuth();
 
   return (
-    <Screen variant="standalone" title={t('loadError.title')} description={t('loadError.body')}>
+    <Screen title={t('loadError.title')} description={t('loadError.body')}>
       <Button title={t('loadError.retry')} loading={isRetrying} onPress={reloadProfile} />
       <Button title={t('profile.signOut')} variant="link" onPress={() => void signOut()} />
     </Screen>

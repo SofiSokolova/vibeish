@@ -4,5 +4,5 @@ import { Screen } from '@/components/screen';
 
 export default function MeetupsScreen() {
   const { t } = useTranslation();
-  return <Screen title={t('meetups.title')} description={t('meetups.body')} />;
+  return <Screen back title={t('meetups.title')} description={t('meetups.body')} />;
 }

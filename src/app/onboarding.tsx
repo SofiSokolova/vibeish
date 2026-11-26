@@ -16,7 +16,7 @@ import { Screen } from '@/components/screen';
 import { SpokenLanguagePicker } from '@/components/spoken-language-picker';
 import { TextField } from '@/components/text-field';
 import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
+import { Fonts, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { currentLanguage } from '@/i18n';
 import { useAuth } from '@/lib/auth';
@@ -166,7 +166,6 @@ export default function OnboardingScreen() {
     // A new key per step starts each step scrolled to the top.
     <Screen
       key={step}
-      variant="standalone"
       title={t(`onboarding.${step}.title`)}
       description={t('onboarding.progress', { step: stepNumber, total: STEPS.length })}>
       {step === 'about' ? (
@@ -420,6 +419,7 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.two,
     paddingHorizontal: Spacing.three,
     borderRadius: Spacing.three,
+    fontFamily: Fonts.sans,
     fontSize: 16,
     textAlign: 'center',
   },

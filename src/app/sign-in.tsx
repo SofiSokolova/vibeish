@@ -90,7 +90,7 @@ export default function SignInScreen() {
   }
 
   return (
-    <Screen variant="standalone" title={Constants.expoConfig?.name ?? ''} description={t('auth.tagline')}>
+    <Screen title={Constants.expoConfig?.name ?? ''} description={t('auth.tagline')}>
       <ThemedText>{t('auth.intro')}</ThemedText>
 
       {step === 'email' ? (

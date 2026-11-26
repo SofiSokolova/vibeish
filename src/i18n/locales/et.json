@@ -1,14 +1,20 @@
 {
   "tabs": {
     "feed": "Voog",
+    "map": "Kaart",
     "meetups": "Kohtumised",
     "create": "Loo",
-    "chats": "Vestlused",
     "profile": "Profiil"
+  },
+  "nav": {
+    "back": "Tagasi"
   },
   "feed": {
     "title": "Voog",
-    "body": "Siia ilmuvad kuulutused sinu lähedal. Pühi paremale, et liituda, ja vasakule, et vahele jätta."
+    "body": "Siia ilmuvad kuulutused sinu lähedal. Pühi paremale, et liituda, ja vasakule, et vahele jätta.",
+    "search": "Otsing",
+    "notifications": "Teavitused",
+    "mapSoon": "Varsti näed sinu lähedal olevaid kuulutusi kaardil."
   },
   "meetups": {
     "title": "Minu kohtumised",
@@ -20,10 +26,6 @@
     "chooseHobby": "Vali hobi",
     "groupRange": "Grupp: {{min}}–{{max}}",
     "groupExact": "Grupp: {{size}}"
-  },
-  "chats": {
-    "title": "Vestlused",
-    "body": "Vestlus avaneb, kui kuulutuse autor sind vastu võtab."
   },
   "profile": {
     "title": "Profiil",

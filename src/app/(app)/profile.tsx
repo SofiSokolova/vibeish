@@ -36,7 +36,7 @@ export default function ProfileScreen() {
   }
 
   return (
-    <Screen title={t('profile.title')}>
+    <Screen back title={t('profile.title')}>
       {profile ? (
         <ProfileDetails profile={profile} />
       ) : status === 'error' ? (

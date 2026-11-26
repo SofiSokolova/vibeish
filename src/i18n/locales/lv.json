@@ -1,14 +1,20 @@
 {
   "tabs": {
     "feed": "Plūsma",
+    "map": "Karte",
     "meetups": "Tikšanās",
     "create": "Izveidot",
-    "chats": "Sarunas",
     "profile": "Profils"
+  },
+  "nav": {
+    "back": "Atpakaļ"
   },
   "feed": {
     "title": "Plūsma",
-    "body": "Šeit parādīsies sludinājumi tavā tuvumā. Pavelc pa labi, lai pieteiktos, pa kreisi — lai izlaistu."
+    "body": "Šeit parādīsies sludinājumi tavā tuvumā. Pavelc pa labi, lai pieteiktos, pa kreisi — lai izlaistu.",
+    "search": "Meklēt",
+    "notifications": "Paziņojumi",
+    "mapSoon": "Drīzumā kartē redzēsi sludinājumus savā tuvumā."
   },
   "meetups": {
     "title": "Manas tikšanās",
@@ -20,10 +26,6 @@
     "chooseHobby": "Izvēlies hobiju",
     "groupRange": "Grupa: {{min}}–{{max}}",
     "groupExact": "Grupa: {{size}}"
-  },
-  "chats": {
-    "title": "Sarunas",
-    "body": "Saruna atvērsies, kad sludinājuma autors tevi apstiprinās."
   },
   "profile": {
     "title": "Profils",

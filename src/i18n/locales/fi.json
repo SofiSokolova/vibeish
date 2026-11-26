@@ -1,14 +1,20 @@
 {
   "tabs": {
     "feed": "Syöte",
+    "map": "Kartta",
     "meetups": "Tapaamiset",
     "create": "Luo",
-    "chats": "Keskustelut",
     "profile": "Profiili"
+  },
+  "nav": {
+    "back": "Takaisin"
   },
   "feed": {
     "title": "Syöte",
-    "body": "Tähän ilmestyvät lähelläsi olevat ilmoitukset. Pyyhkäise oikealle liittyäksesi ja vasemmalle ohittaaksesi."
+    "body": "Tähän ilmestyvät lähelläsi olevat ilmoitukset. Pyyhkäise oikealle liittyäksesi ja vasemmalle ohittaaksesi.",
+    "search": "Haku",
+    "notifications": "Ilmoitukset",
+    "mapSoon": "Pian näet lähelläsi olevat ilmoitukset kartalla."
   },
   "meetups": {
     "title": "Omat tapaamiset",
@@ -20,10 +26,6 @@
     "chooseHobby": "Valitse harrastus",
     "groupRange": "Ryhmä: {{min}}–{{max}}",
     "groupExact": "Ryhmä: {{size}}"
-  },
-  "chats": {
-    "title": "Keskustelut",
-    "body": "Keskustelu avautuu, kun ilmoituksen tekijä hyväksyy sinut."
   },
   "profile": {
     "title": "Profiili",

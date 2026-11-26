@@ -53,7 +53,7 @@ export default function EditProfileScreen() {
   if (profile) return <ProfileForm initial={profile} />;
 
   return (
-    <Screen variant="standalone" title={t('editProfile.title')}>
+    <Screen title={t('editProfile.title')}>
       {status === 'error' ? (
         <>
           <ThemedText themeColor="textSecondary">{t('loadError.body')}</ThemedText>
@@ -184,7 +184,7 @@ function ProfileForm({ initial }: { initial: MyProfile }) {
 
   return (
     <>
-      <Screen variant="standalone" title={t('editProfile.title')}>
+      <Screen title={t('editProfile.title')}>
         <View style={styles.group}>
           <View style={styles.photo}>
             <Avatar

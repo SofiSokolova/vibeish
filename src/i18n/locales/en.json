@@ -1,14 +1,20 @@
 {
   "tabs": {
     "feed": "Feed",
+    "map": "Map",
     "meetups": "Meetups",
     "create": "Create",
-    "chats": "Chats",
     "profile": "Profile"
+  },
+  "nav": {
+    "back": "Back"
   },
   "feed": {
     "title": "Feed",
-    "body": "Listings near you will show up here. Swipe right to join, left to skip."
+    "body": "Listings near you will show up here. Swipe right to join, left to skip.",
+    "search": "Search",
+    "notifications": "Notifications",
+    "mapSoon": "Soon you’ll see listings near you on a map."
   },
   "meetups": {
     "title": "My meetups",
@@ -20,10 +26,6 @@
     "chooseHobby": "Choose a hobby",
     "groupRange": "Group: {{min}}–{{max}}",
     "groupExact": "Group: {{size}}"
-  },
-  "chats": {
-    "title": "Chats",
-    "body": "A chat opens once the author of a listing accepts you."
   },
   "profile": {
     "title": "Profile",

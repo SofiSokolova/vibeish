@@ -16,7 +16,7 @@ export default function CreateScreen() {
     min === max ? t('create.groupExact', { size: min }) : t('create.groupRange', { min, max });
 
   return (
-    <Screen title={t('create.title')} description={t('create.body')}>
+    <Screen back title={t('create.title')} description={t('create.body')}>
       <ThemedText type="smallBold">{t('create.chooseHobby')}</ThemedText>
       <View accessibilityRole="radiogroup" style={styles.grid}>
         {CATEGORIES.map((category) => {

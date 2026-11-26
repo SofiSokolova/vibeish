@@ -2,40 +2,27 @@ import type { ReactNode } from 'react';
 import { Platform, ScrollView, StyleSheet, type ViewStyle } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { BackButton } from '@/components/back-button';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { MaxContentWidth, Spacing } from '@/constants/theme';
 import { useCompactLayout } from '@/hooks/use-compact-layout';
 import { useTheme } from '@/hooks/use-theme';
-
-/** Room left for the web tab bar, which floats over the content (see app-tabs.web.tsx). */
-const WEB_TOP_BAR_SPACE = 96;
-const WEB_BOTTOM_BAR_SPACE = 80;
 
 type ScreenProps = {
   title: string;
   description?: string;
   children?: ReactNode;
-  /** `tab` leaves room for the tab bar; `standalone` is for screens without one, like sign-in. */
-  variant?: 'tab' | 'standalone';
+  /** Shows a back button above the title, for screens that open over the feed. */
+  back?: boolean;
 };
 
-/** A scrollable screen: a title, an optional description, then the screen's content. */
-export function Screen({ title, description, children, variant = 'tab' }: ScreenProps) {
+/** A scrollable screen: an optional back button, a title, an optional description, then the content. */
+export function Screen({ title, description, children, back = false }: ScreenProps) {
   const theme = useTheme();
   const compact = useCompactLayout();
   const safeAreaInsets = useSafeAreaInsets();
-  const hasTabBar = variant === 'tab';
-  const insets = {
-    ...safeAreaInsets,
-    bottom: safeAreaInsets.bottom + (hasTabBar ? BottomTabInset : 0) + Spacing.three,
-  };
-
-  const webPadding: ViewStyle = !hasTabBar
-    ? { paddingTop: compact ? Spacing.four : Spacing.six, paddingBottom: Spacing.four + safeAreaInsets.bottom }
-    : compact
-      ? { paddingTop: Spacing.four, paddingBottom: WEB_BOTTOM_BAR_SPACE + safeAreaInsets.bottom }
-      : { paddingTop: WEB_TOP_BAR_SPACE, paddingBottom: Spacing.four };
+  const insets = { ...safeAreaInsets, bottom: safeAreaInsets.bottom + Spacing.three };
 
   const platformPadding = Platform.select<ViewStyle>({
     android: {
@@ -44,7 +31,10 @@ export function Screen({ title, description, children, variant = 'tab' }: Screen
       paddingRight: insets.right,
       paddingBottom: insets.bottom,
     },
-    web: webPadding,
+    web: {
+      paddingTop: compact ? Spacing.four : Spacing.six,
+      paddingBottom: Spacing.four + safeAreaInsets.bottom,
+    },
   });
 
   return (
@@ -55,6 +45,7 @@ export function Screen({ title, description, children, variant = 'tab' }: Screen
       contentInset={insets}
       contentContainerStyle={[styles.contentContainer, platformPadding]}>
       <ThemedView style={styles.container}>
+        {back ? <BackButton /> : null}
         <ThemedText type="subtitle">{title}</ThemedText>
         {description ? <ThemedText themeColor="textSecondary">{description}</ThemedText> : null}
         {children}
