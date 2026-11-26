@@ -33,6 +33,35 @@ const SUPABASE_STAND_IN = `
   grant usage on schema public, auth, extensions to anon, authenticated, service_role;
   grant execute on function auth.uid() to anon, authenticated, service_role;
 
+  -- Storage: buckets, files and the path helper that policies use. As in Supabase,
+  -- clients may touch storage.objects, and row level security decides what they get.
+  create schema storage;
+  create table storage.buckets (
+    id text primary key,
+    name text not null,
+    public boolean default false,
+    file_size_limit bigint,
+    allowed_mime_types text[]
+  );
+  create table storage.objects (
+    id uuid primary key default gen_random_uuid(),
+    bucket_id text references storage.buckets (id),
+    name text,
+    owner uuid default auth.uid()
+  );
+  alter table storage.objects enable row level security;
+  create function storage.foldername(name text) returns text[] language plpgsql as $$
+  declare
+    _parts text[];
+  begin
+    select string_to_array(name, '/') into _parts;
+    return _parts[1:array_length(_parts, 1) - 1];
+  end
+  $$;
+  grant usage on schema storage to anon, authenticated, service_role;
+  grant all on storage.objects to anon, authenticated, service_role;
+  grant select on storage.buckets to anon, authenticated, service_role;
+
   -- Like a project created with "Automatically expose new tables" turned off: new
   -- tables get no privileges until a migration grants them.
 `;
@@ -594,6 +623,53 @@ await test('signed-out visitors see only categories and cities', () =>
     await fails(run('select id from public.listings'), /permission denied/);
   })
 );
+
+console.log('\nProfile photos');
+
+const photo = (user, file = 'photo.jpg') => `${users[user]}/${file}`;
+const addPhoto = (name) => run(`insert into storage.objects (bucket_id, name) values ('avatars', $1)`, [name]);
+
+await test('people add photos only to their own folder', async () => {
+  await as('alice', () => addPhoto(photo('alice')));
+  await as('bob', () => fails(addPhoto(photo('alice', 'fake.jpg')), /row-level security/));
+});
+
+await test('banned users cannot add photos', () =>
+  as('erin', () => fails(addPhoto(photo('erin')), /row-level security/))
+);
+
+await test('signed-in people see photos unless one of the two blocked the other', async () => {
+  const seen = (user) => as(user, () => run(`select name from storage.objects where bucket_id = 'avatars'`));
+  assert.deepEqual(
+    (await seen('bob')).map((row) => row.name),
+    [photo('alice')]
+  );
+  // Alice blocked Carol in the safety tests above.
+  assert.equal((await seen('carol')).length, 0);
+  assert.equal((await asAnon(() => run('select name from storage.objects'))).length, 0);
+});
+
+await test('a profile can only point at a photo in its own folder', async () => {
+  await as('bob', () =>
+    fails(
+      run('update public.profiles set avatar_path = $1 where id = $2', [photo('alice'), users.bob]),
+      /profiles_avatar_in_own_folder/
+    )
+  );
+  await as('alice', () =>
+    run('update public.profiles set avatar_path = $1 where id = $2', [photo('alice'), users.alice])
+  );
+  const [alice] = await run('select avatar_path from public.profiles where id = $1', [users.alice]);
+  assert.equal(alice.avatar_path, photo('alice'));
+});
+
+await test('people remove only their own photos', async () => {
+  const left = async () => (await run('select name from storage.objects where name = $1', [photo('alice')])).length;
+  await as('bob', () => run('delete from storage.objects where name = $1', [photo('alice')]));
+  assert.equal(await left(), 1);
+  await as('alice', () => run('delete from storage.objects where name = $1', [photo('alice')]));
+  assert.equal(await left(), 0);
+});
 
 console.log('\nServer');
 
