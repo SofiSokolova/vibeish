@@ -3,6 +3,7 @@ import { createContext, use, useEffect, useState, type PropsWithChildren } from 
 
 import { CITIES, type CitySlug } from '@/constants/cities';
 import { useAuth } from '@/lib/auth';
+import { removePhoto, uploadPhoto } from '@/lib/avatar';
 import { fromInterestRows, toInterestRows, type HobbyChoices } from '@/lib/hobbies';
 import { supabase } from '@/lib/supabase';
 
@@ -16,7 +17,15 @@ export type MyProfile = {
   /** The city the person typed because it is not in the list. */
   requestedCity: string | null;
   hobbies: HobbyChoices;
+  /** The profile photo's path in Storage. */
+  avatarPath: string | null;
 };
+
+/** What the profile form saves: everything but the photo, which is saved on its own. */
+export type ProfileFields = Omit<MyProfile, 'avatarPath'>;
+
+/** Something that went wrong while saving, with a code for database errors. */
+export type SaveError = { message: string; code?: string };
 
 type MyProfileContextValue = {
   /** The last loaded or saved profile; null until the first load succeeds. */
@@ -24,8 +33,13 @@ type MyProfileContextValue = {
   /** `error` when the last load failed. */
   status: 'loading' | 'ready' | 'error';
   reload: () => void;
-  /** Saves the whole profile in one step. Resolves to the error, or null when it worked. */
-  save: (profile: MyProfile) => Promise<PostgrestError | null>;
+  /** Saves the profile form in one step. Resolves to the error, or null when it worked. */
+  save: (fields: ProfileFields) => Promise<PostgrestError | null>;
+  /**
+   * Puts a prepared photo on the profile right away, or takes the photo off with null, and
+   * removes the old file. Resolves to the error, or null when it worked.
+   */
+  setPhoto: (photo: ArrayBuffer | null) => Promise<SaveError | null>;
 };
 
 const MyProfileContext = createContext<MyProfileContextValue | null>(null);
@@ -76,21 +90,50 @@ export function MyProfileProvider({ children }: PropsWithChildren) {
 
   const latest = loaded?.userId === userId ? loaded : null;
 
+  /** Changes the loaded profile after a save, keeping whatever else changed meanwhile. */
+  function updateLoaded(change: Partial<MyProfile>) {
+    setLoaded((previous) =>
+      previous?.userId === userId && previous.profile
+        ? { ...previous, profile: { ...previous.profile, ...change }, failed: false }
+        : previous
+    );
+  }
+
   const value: MyProfileContextValue = {
     profile: latest?.profile ?? null,
     status: latest?.attempt === attempt ? (latest.failed ? 'error' : 'ready') : 'loading',
     reload: () => setAttempt((count) => count + 1),
-    save: async (profile) => {
+    save: async (fields) => {
       const { error } = await supabase.rpc('update_profile', {
-        p_display_name: profile.displayName,
-        p_bio: profile.bio,
-        p_languages: profile.languages,
-        p_home_city: profile.homeCity ?? undefined,
-        p_requested_city: profile.homeCity ? undefined : (profile.requestedCity ?? undefined),
-        p_interests: toInterestRows(profile.hobbies),
+        p_display_name: fields.displayName,
+        p_bio: fields.bio,
+        p_languages: fields.languages,
+        p_home_city: fields.homeCity ?? undefined,
+        p_requested_city: fields.homeCity ? undefined : (fields.requestedCity ?? undefined),
+        p_interests: toInterestRows(fields.hobbies),
       });
-      if (!error && userId) setLoaded({ userId, attempt, profile, failed: false });
+      if (!error) updateLoaded(fields);
       return error;
+    },
+    setPhoto: async (photo) => {
+      if (!userId) return { message: 'Not signed in' };
+      const oldPath = latest?.profile?.avatarPath ?? null;
+      let newPath: string | null = null;
+      if (photo) {
+        try {
+          newPath = await uploadPhoto(userId, photo);
+        } catch (error) {
+          return error instanceof Error ? error : { message: String(error) };
+        }
+      }
+      const { error } = await supabase.from('profiles').update({ avatar_path: newPath }).eq('id', userId);
+      if (error) {
+        if (newPath) void removePhoto(newPath);
+        return error;
+      }
+      updateLoaded({ avatarPath: newPath });
+      if (oldPath) void removePhoto(oldPath);
+      return null;
     },
   };
 
@@ -101,7 +144,11 @@ export function MyProfileProvider({ children }: PropsWithChildren) {
 async function loadMyProfile(userId: string): Promise<MyProfile | null> {
   try {
     const [profile, privateProfile, interests] = await Promise.all([
-      supabase.from('profiles').select('display_name, bio, languages, home_city').eq('id', userId).single(),
+      supabase
+        .from('profiles')
+        .select('display_name, bio, languages, home_city, avatar_path')
+        .eq('id', userId)
+        .single(),
       supabase.from('profile_private').select('requested_city').eq('user_id', userId).single(),
       supabase.from('user_interests').select('category, skill_level').eq('user_id', userId),
     ]);
@@ -113,6 +160,7 @@ async function loadMyProfile(userId: string): Promise<MyProfile | null> {
       homeCity: CITIES.find((city) => city.slug === profile.data.home_city)?.slug ?? null,
       requestedCity: privateProfile.data.requested_city,
       hobbies: fromInterestRows(interests.data),
+      avatarPath: profile.data.avatar_path,
     };
   } catch {
     return null;

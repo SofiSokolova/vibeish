@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
+import { Avatar } from '@/components/avatar';
 import { Button } from '@/components/button';
 import { HobbyTags } from '@/components/hobby-picker';
 import { LanguagePicker } from '@/components/language-picker';
@@ -81,9 +82,12 @@ function ProfileDetails({ profile }: { profile: MyProfile }) {
 
   return (
     <View style={styles.section}>
-      <View>
-        <ThemedText style={styles.name}>{profile.displayName}</ThemedText>
-        <ThemedText themeColor="textSecondary">{[city, languages].filter(Boolean).join(' · ')}</ThemedText>
+      <View style={styles.header}>
+        <Avatar path={profile.avatarPath} name={profile.displayName} size={72} />
+        <View style={styles.headerText}>
+          <ThemedText style={styles.name}>{profile.displayName}</ThemedText>
+          <ThemedText themeColor="textSecondary">{[city, languages].filter(Boolean).join(' · ')}</ThemedText>
+        </View>
       </View>
 
       <View style={styles.group}>
@@ -114,6 +118,14 @@ const styles = StyleSheet.create({
   },
   group: {
     gap: Spacing.two,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+  },
+  headerText: {
+    flex: 1,
   },
   name: {
     fontSize: 24,

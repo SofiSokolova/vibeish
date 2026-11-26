@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
+import { Avatar } from '@/components/avatar';
 import { Button } from '@/components/button';
 import { Tag } from '@/components/chip';
 import { CityChips, OTHER_CITY, OtherCityField, type CityChoice } from '@/components/city-picker';
@@ -18,6 +19,7 @@ import { spokenLanguageNames } from '@/constants/languages';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import { isNetworkFailure } from '@/lib/auth-errors';
+import { pickPhoto, preparePhoto, type PreparedPhoto } from '@/lib/avatar';
 import { useMyProfile, type MyProfile } from '@/lib/my-profile';
 
 // The same limits as the profiles table.
@@ -34,6 +36,13 @@ type ErrorKey =
 
 /** The lists that open in a dialog: the editor itself shows only what is chosen. */
 type OpenList = 'languages' | 'hobbies' | 'city';
+
+type PhotoErrorKey = 'editProfile.photoFailed' | 'common.errors.network' | 'common.errors.generic';
+
+/** A photo change shown in the preview and saved only when the person agrees. */
+type PendingPhoto = ({ kind: 'new' } & PreparedPhoto) | { kind: 'remove' };
+
+const AVATAR_SIZE = 88;
 
 /** Edits the signed-in person's profile: name, about text, languages, hobbies and city. */
 export default function EditProfileScreen() {
@@ -65,7 +74,12 @@ function leaveEditor() {
 
 function ProfileForm({ initial }: { initial: MyProfile }) {
   const { t } = useTranslation();
-  const { save } = useMyProfile();
+  const { profile, save, setPhoto } = useMyProfile();
+  // The saved photo comes from the live profile; a change waits in pendingPhoto until it is saved.
+  const avatarPath = profile?.avatarPath ?? null;
+  const [pendingPhoto, setPendingPhoto] = useState<PendingPhoto | null>(null);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const [photoError, setPhotoError] = useState<PhotoErrorKey | null>(null);
   const [name, setName] = useState(initial.displayName);
   const [about, setAbout] = useState(initial.bio);
   const [languages, setLanguages] = useState(initial.languages);
@@ -77,6 +91,46 @@ function ProfileForm({ initial }: { initial: MyProfile }) {
   const [openList, setOpenList] = useState<OpenList | null>(null);
   const [error, setError] = useState<ErrorKey | null>(null);
   const [saving, setSaving] = useState(false);
+
+  async function choosePhoto() {
+    setPhotoError(null);
+    try {
+      // Nothing shows as busy while the picker is open: on the web, closing it may never answer.
+      const uri = await pickPhoto();
+      if (!uri) return;
+      setPhotoBusy(true);
+      setPendingPhoto({ kind: 'new', ...(await preparePhoto(uri)) });
+    } catch {
+      setPhotoError('editProfile.photoFailed');
+    }
+    setPhotoBusy(false);
+  }
+
+  /** Saves the photo change on its own. Resolves to false when that failed. */
+  async function savePhoto(): Promise<boolean> {
+    if (!pendingPhoto) return true;
+    setPhotoError(null);
+    setPhotoBusy(true);
+    const error = await setPhoto(pendingPhoto.kind === 'new' ? pendingPhoto.data : null);
+    setPhotoBusy(false);
+    if (error) {
+      setPhotoError(
+        isNetworkFailure(error)
+          ? 'common.errors.network'
+          : pendingPhoto.kind === 'new'
+            ? 'editProfile.photoFailed'
+            : 'common.errors.generic'
+      );
+      return false;
+    }
+    setPendingPhoto(null);
+    return true;
+  }
+
+  function cancelPhoto() {
+    setPendingPhoto(null);
+    setPhotoError(null);
+  }
 
   async function submit() {
     const typedCity = otherCity.trim();
@@ -99,6 +153,11 @@ function ProfileForm({ initial }: { initial: MyProfile }) {
 
     setSaving(true);
     setError(null);
+    // A photo that is chosen but not saved yet is saved together with the rest.
+    if (!(await savePhoto())) {
+      setSaving(false);
+      return;
+    }
     const saveError = await save({
       displayName: name.trim(),
       bio: about.trim(),
@@ -126,6 +185,61 @@ function ProfileForm({ initial }: { initial: MyProfile }) {
   return (
     <>
       <Screen variant="standalone" title={t('editProfile.title')}>
+        <View style={styles.group}>
+          <View style={styles.photo}>
+            <Avatar
+              path={pendingPhoto ? null : avatarPath}
+              previewUri={pendingPhoto?.kind === 'new' ? pendingPhoto.uri : null}
+              name={name || initial.displayName}
+              size={AVATAR_SIZE}
+            />
+            <View style={styles.photoActions}>
+              {pendingPhoto ? (
+                <>
+                  <Button
+                    title={
+                      pendingPhoto.kind === 'new' ? t('editProfile.savePhoto') : t('editProfile.removePhotoConfirm')
+                    }
+                    loading={photoBusy}
+                    onPress={() => void savePhoto()}
+                  />
+                  <Button variant="link" title={t('editProfile.cancel')} disabled={photoBusy} onPress={cancelPhoto} />
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="secondary"
+                    title={avatarPath ? t('editProfile.changePhoto') : t('editProfile.addPhoto')}
+                    loading={photoBusy}
+                    onPress={() => void choosePhoto()}
+                  />
+                  {avatarPath ? (
+                    <Button
+                      variant="link"
+                      title={t('editProfile.removePhoto')}
+                      disabled={photoBusy}
+                      onPress={() => {
+                        setPhotoError(null);
+                        setPendingPhoto({ kind: 'remove' });
+                      }}
+                    />
+                  ) : null}
+                </>
+              )}
+            </View>
+          </View>
+          <ThemedText
+            type="small"
+            themeColor={photoError ? 'danger' : 'textSecondary'}
+            accessibilityLiveRegion={photoError ? 'polite' : 'none'}>
+            {photoError
+              ? t(photoError)
+              : pendingPhoto
+                ? t(pendingPhoto.kind === 'new' ? 'editProfile.photoPreview' : 'editProfile.removePhotoQuestion')
+                : t('editProfile.photoHint')}
+          </ThemedText>
+        </View>
+
         <TextField
           label={t('onboarding.profile.name')}
           hint={t('onboarding.profile.nameHint')}
@@ -284,6 +398,16 @@ function ProfileForm({ initial }: { initial: MyProfile }) {
 const styles = StyleSheet.create({
   group: {
     gap: Spacing.two,
+  },
+  photo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.three,
+  },
+  photoActions: {
+    flex: 1,
+    alignItems: 'flex-start',
+    gap: Spacing.one,
   },
   tags: {
     flexDirection: 'row',

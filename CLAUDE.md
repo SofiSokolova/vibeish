@@ -21,6 +21,7 @@ An app and website for finding friends through shared activities. People swipe t
 - Tabs are defined once in `src/constants/tabs.ts` and rendered by `src/components/app-tabs.tsx` (native) and `app-tabs.web.tsx` (web: floating top bar on wide screens, bottom bar on phones). Tab screens live in `src/app/(app)` and use `src/components/screen.tsx`; screens without the tab bar pass `variant="standalone"`.
 - Cards that open next to an element, like the hobby level choice, use `src/components/anchored-popover.tsx`; whole lists to choose from, like every language, open in `src/components/dialog.tsx`. Both float over the content instead of pushing it aside, and a card never opens over a dialog.
 - The signed-in person's own profile comes from `useMyProfile()` in `src/lib/my-profile.tsx`, which loads it once and keeps it after a save. The profile tab shows it; `src/app/edit-profile.tsx` changes it with `update_profile()`.
+- Profile photos live in the private `avatars` bucket, one folder per person (`<user id>/<file>.jpg`), and follow the same visibility as profiles. `src/lib/avatar.ts` turns a picked photo into a square JPEG before uploading it, and `src/components/avatar.tsx` shows a photo through a short-lived signed link.
 - The interface language is chosen with `setAppLanguage()` from `src/i18n`, which remembers it on the device; for signed-in users `src/lib/auth.tsx` also saves it to `profile_private.ui_language`.
 - The web app is a single-page app (`web.output: "single"`): nothing is server-rendered.
 - Only `EXPO_PUBLIC_*` values go into the app, and they are public by design. Server secrets belong in Supabase Edge Function secrets, never in the repo.
@@ -34,7 +35,7 @@ An app and website for finding friends through shared activities. People swipe t
 - Everything in `public` is callable through the Data API. Only functions the app calls live there; policy helpers live in the `private` schema, which the API does not expose. Supabase's advisor warning "Signed-In Users Can Execute SECURITY DEFINER Function" is expected for the app-facing functions, which check the caller themselves.
 - After every migration: `npm run db:test`, `npm run db:push`, then `npm run db:types` to refresh `src/lib/database.types.ts`; check `npx supabase db advisors --remote`.
 - Reference data (categories, cities) lives in migrations and must match `src/constants/categories.ts` and `src/constants/cities.ts`.
-- Every new access rule gets a test in `scripts/db-test.mjs`, which runs the migrations in an in-memory Postgres (PGlite) with a stand-in for Supabase's auth schema.
+- Every new access rule gets a test in `scripts/db-test.mjs`, which runs the migrations in an in-memory Postgres (PGlite) with a stand-in for Supabase's auth and storage schemas. Storage buckets and their policies are created in migrations too.
 
 ## Commands
 
