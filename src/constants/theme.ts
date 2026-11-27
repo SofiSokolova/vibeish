@@ -62,12 +62,15 @@ export const Effects = {
   light: {
     /** Behind the whole screen; the day design has a plain background and the orb instead. */
     screenGlow: null,
-    /** The soft colour cloud at the top left: four colours that fade into each other. */
+    /**
+     * The soft colour cloud at the top left: four colours that fade into each other, each
+     * gone well inside its square so that no edge shows.
+     */
     orb: [
-      'radial-gradient(circle 190px at 65% 24%, #B6FFD9 0%, #B6FFD900 100%)',
-      'radial-gradient(circle 190px at 76% 65%, #C9B6FF 0%, #C9B6FF00 100%)',
-      'radial-gradient(circle 190px at 24% 35%, #9AD7FF 0%, #9AD7FF00 100%)',
-      'radial-gradient(circle 190px at 35% 76%, #FFB3F0 0%, #FFB3F000 100%)',
+      'radial-gradient(circle 200px at 59% 34%, #B6FFD9 0%, #B6FFD900 100%)',
+      'radial-gradient(circle 200px at 66% 59%, #C9B6FF 0%, #C9B6FF00 100%)',
+      'radial-gradient(circle 200px at 34% 41%, #9AD7FF 0%, #9AD7FF00 100%)',
+      'radial-gradient(circle 200px at 41% 66%, #FFB3F0 0%, #FFB3F000 100%)',
     ].join(', '),
     gridLine: '#6A2CFF22',
     /** Round buttons and chips that let the background show through. */
@@ -107,7 +110,8 @@ export const Effects = {
       label: '#6A2CFF',
     },
     sent: { text: '#16753F', background: '#FFFFFFCC', glow: undefined },
-    create: 'linear-gradient(135deg, #C8148F, #6A2CFF)',
+    /** The «+» in the feed's bottom bar. */
+    create: { background: 'linear-gradient(135deg, #C8148F, #6A2CFF)', icon: '#FFFFFF' },
     bar: { background: '#FFFFFFCC', border: '#14102B14' },
   },
   dark: {
@@ -142,7 +146,7 @@ export const Effects = {
       label: '#3DFF9A',
     },
     sent: { text: '#3DFF9A', background: '#00000000', glow: '#3DFF9A88' },
-    create: 'linear-gradient(135deg, #FF2BD6, #6A2CFF)',
+    create: { background: 'linear-gradient(135deg, #FF2BD6, #6A2CFF)', icon: '#FFFFFF' },
     bar: { background: '#07060FCC', border: '#22F3FF22' },
   },
 } as const;

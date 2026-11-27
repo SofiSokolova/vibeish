@@ -7,25 +7,33 @@ import { Icon, type IconName } from '@/components/icon';
 import { ThemedText } from '@/components/themed-text';
 import { ICONS } from '@/constants/icons';
 import { Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+import { useEffects, useTheme } from '@/hooks/use-theme';
 
 /** The feed's bottom bar: meetups, a new plan and the profile, each opening over the feed. */
 export function FeedBottomBar() {
   const { t } = useTranslation();
-  const theme = useTheme();
+  const fx = useEffects();
   const insets = useSafeAreaInsets();
 
   return (
     <View
       role="navigation"
-      style={[styles.bar, { borderTopColor: theme.border, paddingBottom: insets.bottom + Spacing.two }]}>
+      style={[
+        styles.bar,
+        {
+          backgroundColor: fx.bar.background,
+          borderTopColor: fx.bar.border,
+          paddingBottom: insets.bottom + Spacing.two,
+        },
+      ]}>
       <BarLink href="/meetups" icon={ICONS.meetups} label={t('tabs.meetups')} />
+      {/* A link's child takes one flat style object: it drops style functions and rejects arrays. */}
       <Link href="/create" asChild>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('tabs.create')}
-          style={({ pressed }) => [styles.create, { backgroundColor: theme.accent }, pressed && styles.pressed]}>
-          <Icon name={ICONS.create} color={theme.onAccent} />
+          style={StyleSheet.flatten([styles.create, { backgroundImage: fx.create.background }])}>
+          <Icon name={ICONS.create} color={fx.create.icon} size={22} />
         </Pressable>
       </Link>
       <BarLink href="/profile" icon={ICONS.profile} label={t('tabs.profile')} />
@@ -37,9 +45,9 @@ function BarLink({ href, icon, label }: { href: Href; icon: IconName; label: str
   const theme = useTheme();
   return (
     <Link href={href} asChild>
-      <Pressable accessibilityRole="link" style={({ pressed }) => [styles.item, pressed && styles.pressed]}>
+      <Pressable accessibilityRole="link" style={styles.item}>
         <Icon name={icon} color={theme.textSecondary} />
-        <ThemedText type="small" themeColor="textSecondary">
+        <ThemedText themeColor="textSecondary" style={styles.label}>
           {label}
         </ThemedText>
       </Pressable>
@@ -52,25 +60,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingTop: Spacing.two,
-    paddingHorizontal: Spacing.four,
-    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingTop: 6,
+    paddingHorizontal: 28,
+    borderTopWidth: 1,
   },
   item: {
-    minWidth: 72,
+    minWidth: 64,
     minHeight: 44,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: Spacing.half,
+    gap: 3,
+  },
+  label: {
+    fontSize: 11,
+    lineHeight: 14,
+    fontWeight: 700,
   },
   create: {
-    width: 56,
+    width: 52,
     height: 40,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  pressed: {
-    opacity: 0.7,
   },
 });

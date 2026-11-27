@@ -10,7 +10,8 @@ import {
 import { useFonts, type FontFamilyDefinition } from 'expo-font';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { StyleSheet, useColorScheme } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import { ProfileLoadError } from '@/components/profile-load-error';
@@ -63,13 +64,16 @@ const DARK_NAVIGATION = navigationTheme(DarkTheme, Colors.dark);
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DARK_NAVIGATION : LIGHT_NAVIGATION}>
-      <AuthProvider>
-        <MyProfileProvider>
-          <RootNavigator />
-        </MyProfileProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    // Gestures, like swiping the feed's cards, need this view around the whole app.
+    <GestureHandlerRootView style={styles.root}>
+      <ThemeProvider value={colorScheme === 'dark' ? DARK_NAVIGATION : LIGHT_NAVIGATION}>
+        <AuthProvider>
+          <MyProfileProvider>
+            <RootNavigator />
+          </MyProfileProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -111,3 +115,9 @@ function RootNavigator() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});

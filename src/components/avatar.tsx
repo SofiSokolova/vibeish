@@ -13,10 +13,12 @@ type AvatarProps = {
   size: number;
   /** A local photo shown instead, such as a new one that is not saved yet. */
   previewUri?: string | null;
+  /** Colours for the letter when there is no photo: a background (a colour or gradient), the letter and a glow. */
+  tint?: { background: string; text: string; shadow?: string };
 };
 
 /** A round profile photo. It sits next to the person's name, so screen readers skip it. */
-export function Avatar({ path, name, size, previewUri }: AvatarProps) {
+export function Avatar({ path, name, size, previewUri, tint }: AvatarProps) {
   const theme = useTheme();
   const signedUrl = usePhotoUrl(previewUri ? null : path);
   const letter = Array.from(name.trim())[0]?.toUpperCase() ?? '';
@@ -26,7 +28,10 @@ export function Avatar({ path, name, size, previewUri }: AvatarProps) {
       aria-hidden
       style={[
         styles.circle,
-        { width: size, height: size, borderRadius: size / 2, backgroundColor: theme.backgroundElement },
+        { width: size, height: size, borderRadius: size / 2 },
+        tint
+          ? { backgroundImage: tint.background, boxShadow: tint.shadow }
+          : { backgroundColor: theme.backgroundElement },
       ]}>
       {previewUri ? (
         <Image source={{ uri: previewUri }} style={StyleSheet.absoluteFill} contentFit="cover" />
@@ -41,7 +46,10 @@ export function Avatar({ path, name, size, previewUri }: AvatarProps) {
       ) : (
         <ThemedText
           themeColor="textSecondary"
-          style={{ fontSize: size * 0.4, lineHeight: size * 0.5, fontWeight: 600 }}>
+          style={[
+            { fontSize: size * 0.4, lineHeight: size * 0.5, fontWeight: 600 },
+            tint && { color: tint.text, fontWeight: 800 },
+          ]}>
           {letter}
         </ThemedText>
       )}
