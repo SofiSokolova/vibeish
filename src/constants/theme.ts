@@ -23,6 +23,8 @@ export const Colors = {
     danger: '#C4320A',
     /** Cards that float over the screen, like the level choice. */
     popover: '#FFFFFF',
+    /** What is picked in a form, such as languages or the date, shown as chips or text. */
+    picked: '#00788A',
     // The two coloured copies behind the logo.
     brandPink: '#C8148F',
     brandCyan: '#00B8D4',
@@ -43,6 +45,7 @@ export const Colors = {
     onAccent: '#07060F',
     danger: '#FF7A5C',
     popover: '#15122B',
+    picked: '#22F3FF',
     brandPink: '#FF2BD6',
     brandCyan: '#22F3FF',
     levelBeginner: '#3DFF9A',

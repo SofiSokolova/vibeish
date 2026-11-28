@@ -2,24 +2,33 @@ import type { CategorySlug } from '@/constants/categories';
 import type { CitySlug } from '@/constants/cities';
 import type { SkillLevel } from '@/constants/skill-levels';
 
+export type CostType = 'free' | 'split' | 'paid';
+
 /** A listing as a feed card shows it. */
 export type FeedItem = {
   id: string;
   category: CategorySlug;
-  /** The author's level in this hobby, or null when they give none. */
-  level: SkillLevel | null;
+  /** Who the meetup is for, or null when any level is welcome. */
+  forLevel: SkillLevel | null;
   title: string;
   description: string;
   startsAt: Date;
+  /** The day is set and the time is agreed in the chat. */
+  timeTbd: boolean;
   city: CitySlug;
   placeName: string;
   /** The largest group, counting the author. */
   groupMax: number;
   spotsLeft: number;
-  costType: 'free' | 'split' | 'paid';
+  costType: CostType;
   /** The price in euros, or about what each person chips in when the cost is split. */
   costEur: number | null;
-  author: { name: string; avatarPath: string | null };
+  author: {
+    name: string;
+    avatarPath: string | null;
+    /** The author's own level in this hobby, or null when they give none. */
+    level: SkillLevel | null;
+  };
 };
 
 /** Which way a card left the feed: right asks to join (vibe), left skips it (nah). */
@@ -51,6 +60,12 @@ export function formatWhen(startsAt: Date, now: Date, locale: string): string {
       ? { weekday: 'short', hour: 'numeric', minute: '2-digit' }
       : { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' },
   ).format(startsAt);
+  return text.charAt(0).toLocaleUpperCase(locale) + text.slice(1);
+}
+
+/** The day of a meetup whose time is agreed in the chat: the weekday, day and month. */
+export function formatDay(startsAt: Date, locale: string): string {
+  const text = new Intl.DateTimeFormat(locale, { weekday: 'short', day: 'numeric', month: 'long' }).format(startsAt);
   return text.charAt(0).toLocaleUpperCase(locale) + text.slice(1);
 }
 
@@ -88,47 +103,50 @@ export function sampleListings(now: Date): FeedItem[] {
     {
       id: 'sample-table-tennis',
       category: 'table_tennis',
-      level: 2,
+      forLevel: 1,
       title: 'Теннис в субботу, нужен ещё один',
       description: 'Играем пару часов, ракетки есть.',
       startsAt: nextTime(now, 6, 18, 0),
+      timeTbd: false,
       city: 'tallinn',
       placeName: 'Kadriorg',
       groupMax: 4,
       spotsLeft: 1,
       costType: 'split',
       costEur: 5,
-      author: { name: 'Марта', avatarPath: null },
+      author: { name: 'Марта', avatarPath: null, level: 2 },
     },
     {
       id: 'sample-board-games',
       category: 'board_games',
-      level: 1,
+      forLevel: null,
       title: 'Настолки и пицца в пятницу',
       description: 'Объясним правила, приходи с друзьями.',
       startsAt: nextTime(now, 5, 19, 30),
+      timeTbd: false,
       city: 'tallinn',
       placeName: 'Telliskivi',
       groupMax: 6,
       spotsLeft: 2,
       costType: 'split',
       costEur: 10,
-      author: { name: 'Артём', avatarPath: null },
+      author: { name: 'Артём', avatarPath: null, level: 1 },
     },
     {
       id: 'sample-running',
       category: 'running',
-      level: 3,
+      forLevel: 3,
       title: 'Пробежка вдоль моря, 8 км',
       description: 'Темп около 5:00 на километр, потом кофе.',
       startsAt: nextTime(now, 0, 9, 0),
+      timeTbd: false,
       city: 'tallinn',
       placeName: 'Pirita',
       groupMax: 8,
       spotsLeft: 3,
       costType: 'free',
       costEur: null,
-      author: { name: 'Лиис', avatarPath: null },
+      author: { name: 'Лиис', avatarPath: null, level: 3 },
     },
   ];
 }

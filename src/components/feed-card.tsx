@@ -11,24 +11,31 @@ import { ICONS } from '@/constants/icons';
 import { skillLevelInfo } from '@/constants/skill-levels';
 import { Spacing } from '@/constants/theme';
 import { useEffects, useTheme } from '@/hooks/use-theme';
-import { formatEuros, formatWhen, type FeedItem } from '@/lib/feed';
+import { formatDay, formatEuros, formatWhen, type FeedItem } from '@/lib/feed';
 
 export const CARD_RADIUS = 26;
 const PICTURE_SIZE = 56;
 
 /**
- * A listing in the feed, as a «hobby profile»: the hobby and the author's level on top, then
- * what, when, where, how many people and what it costs, the author's note and the author.
+ * A listing in the feed, as a «hobby profile»: the hobby and who it is for on top, then what,
+ * when, where, how many people and what it costs, the author's note and the author with their
+ * own level.
  */
 export function FeedCard({ item, now }: { item: FeedItem; now: Date }) {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
   const fx = useEffects();
   const locale = i18n.language;
-  const level = item.level === null ? null : skillLevelInfo(item.level);
-  // The hobby is written in the level's colour, which always comes with the dots.
+  const level = item.forLevel === null ? null : skillLevelInfo(item.forLevel);
+  // The hobby is written in the level's colour, which always comes with the dots; a meetup
+  // for any level has empty grey dots.
+  const levelColor = level ? theme[level.color] : theme.textSecondary;
   const hobbyColor = level ? theme[level.color] : fx.card.icon;
+  const authorLevel = item.author.level === null ? null : skillLevelInfo(item.author.level);
   const picture = HOBBY_IMAGES[item.category];
+  const when = item.timeTbd
+    ? t('feed.dayTimeTbd', { day: formatDay(item.startsAt, locale) })
+    : formatWhen(item.startsAt, now, locale);
 
   const price =
     item.costType === 'free' || item.costEur === null
@@ -57,14 +64,12 @@ export function FeedCard({ item, now }: { item: FeedItem; now: Date }) {
           </View>
           <View style={styles.hobby}>
             <ThemedText style={[styles.category, { color: hobbyColor }]}>{t(`category.${item.category}`)}</ThemedText>
-            {level ? (
-              <View style={styles.level}>
-                <SkillLevelDots level={level.value} color={hobbyColor} size={9} glow={fx.dotGlow} />
-                <ThemedText style={[styles.levelName, { color: hobbyColor }]}>
-                  {t(`skillLevel.${level.slug}.title`)}
-                </ThemedText>
-              </View>
-            ) : null}
+            <View style={styles.level}>
+              <SkillLevelDots level={level?.value ?? null} color={levelColor} size={9} glow={fx.dotGlow} />
+              <ThemedText style={[styles.levelName, { color: levelColor }]}>
+                {t(`listingLevel.${level?.slug ?? 'any'}`)}
+              </ThemedText>
+            </View>
           </View>
         </View>
 
@@ -73,7 +78,7 @@ export function FeedCard({ item, now }: { item: FeedItem; now: Date }) {
             {item.title}
           </ThemedText>
           <View role="list" style={styles.facts}>
-            <Fact icon={ICONS.time} text={formatWhen(item.startsAt, now, locale)} />
+            <Fact icon={ICONS.time} text={when} />
             <Fact icon={ICONS.place} text={`${item.placeName}, ${t(`city.${item.city}`)}`} />
             <Fact
               icon={ICONS.people}
@@ -85,15 +90,27 @@ export function FeedCard({ item, now }: { item: FeedItem; now: Date }) {
             />
             <Fact icon={ICONS.price} text={price} />
           </View>
-          <ThemedText numberOfLines={3} style={styles.note}>
-            {t('feed.quote', { text: item.description })}
-          </ThemedText>
+          {item.description ? (
+            <ThemedText numberOfLines={3} style={styles.note}>
+              {t('feed.quote', { text: item.description })}
+            </ThemedText>
+          ) : null}
           <View style={styles.footer}>
             <View style={styles.author}>
               <Avatar path={item.author.avatarPath} name={item.author.name} size={38} tint={fx.author} />
-              <ThemedText numberOfLines={1} style={styles.authorName}>
-                {item.author.name}
-              </ThemedText>
+              <View style={styles.authorText}>
+                <ThemedText numberOfLines={1} style={styles.authorName}>
+                  {item.author.name}
+                </ThemedText>
+                {authorLevel ? (
+                  <View style={styles.level}>
+                    <SkillLevelDots level={authorLevel.value} color={theme[authorLevel.color]} />
+                    <ThemedText numberOfLines={1} style={[styles.authorLevel, { color: theme[authorLevel.color] }]}>
+                      {t(`skillLevel.${authorLevel.slug}.title`)}
+                    </ThemedText>
+                  </View>
+                ) : null}
+              </View>
             </View>
             {/* The listing's own screen comes in a later stage. */}
             <Pressable
@@ -217,10 +234,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
   },
-  authorName: {
+  authorText: {
     flexShrink: 1,
+    gap: 2,
+  },
+  authorName: {
     fontSize: 14,
     lineHeight: 20,
+    fontWeight: 700,
+  },
+  authorLevel: {
+    flexShrink: 1,
+    fontSize: 12,
+    lineHeight: 16,
     fontWeight: 700,
   },
   details: {

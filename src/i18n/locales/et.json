@@ -13,11 +13,11 @@
     "title": "Voog",
     "search": "Otsing",
     "notifications": "Teavitused",
-    "mapSoon": "Varsti näed sinu lähedal olevaid kuulutusi kaardil.",
+    "mapSoon": "Varsti näed sinu lähedal toimuvaid kohtumisi kaardil.",
     "filters": "Filtrid",
     "city": "Linn: {{city}}. Muuda",
     "cityTitle": "Linn",
-    "cityHint": "Võid vaadata ka teise linna kuulutusi, näiteks enne reisi.",
+    "cityHint": "Võid vaadata ka teise linna kohtumisi, näiteks enne reisi.",
     "today": "Täna",
     "weekend": "Nädalavahetusel",
     "spots": "{{taken}}/{{total}} · vabu kohti: {{left}}",
@@ -27,23 +27,84 @@
     "details": "Lähemalt",
     "nah": "NAH",
     "vibe": "VIBE",
-    "nahLabel": "Nah — jäta vahele",
-    "vibeLabel": "Vibe — soovin liituda",
+    "nahLabel": "Nah: jäta vahele",
+    "vibeLabel": "Vibe: soovin liituda",
     "sent": "Soov saadetud",
-    "empty": "Siin rohkem kuulutusi praegu pole. Vaata hiljem uuesti või loo oma.",
-    "emptyFiltered": "Nendeks päevadeks kuulutusi veel pole. Proovi teist filtrit.",
-    "createOwn": "Loo kuulutus"
+    "empty": "Siin rohkem kohtumisi praegu pole. Vaata hiljem uuesti või loo oma.",
+    "emptyFiltered": "Nendeks päevadeks kohtumisi veel pole. Proovi teist filtrit.",
+    "createOwn": "Loo kohtumine",
+    "dayTimeTbd": "{{day}} · aja lepime kokku vestluses"
   },
   "meetups": {
     "title": "Minu kohtumised",
-    "body": "Sinu kuulutused ja liitumissoovid ühes kohas."
+    "body": "Sinu kohtumised ja liitumissoovid ühes kohas."
   },
   "create": {
-    "title": "Uus kuulutus",
-    "body": "Vali hobi, aeg ja koht ning leia seltskond.",
+    "title": "Uus kohtumine",
+    "hobby": "Hobi",
     "chooseHobby": "Vali hobi",
-    "groupRange": "Grupp: {{min}}–{{max}}",
-    "groupExact": "Grupp: {{size}}"
+    "changeHobby": "Muuda hobi",
+    "remember": "Jäta järgmisteks kohtumisteks meelde",
+    "level": "Kellele",
+    "levelLabel": "Kellele: {{level}}. Muuda",
+    "name": "Pealkiri",
+    "details": "Üksikasjad",
+    "detailsPlaceholder": "Mida kaasa võtta, kus täpselt kohtute, keda ootad",
+    "when": "Millal",
+    "chooseDay": "Vali päev",
+    "whenLabel": "Millal: {{when}}. Muuda",
+    "today": "Täna",
+    "tomorrow": "Homme",
+    "previousMonth": "Eelmine kuu",
+    "nextMonth": "Järgmine kuu",
+    "time": "Kellaaeg",
+    "hours": "Tunnid",
+    "minutes": "Minutid",
+    "timeInChat": "Aja lepime kokku vestluses",
+    "where": "Kus",
+    "choosePlace": "Vali koht",
+    "placeLabel": "Koht: {{place}}. Muuda",
+    "city": "Linn",
+    "searchPlace": "Otsi kohta",
+    "noPlaces": "Midagi ei leitud. Proovi teist nime.",
+    "searchHint": "Hakka sisestama koha nime või aadressi.",
+    "searchFailed": "Kohtade otsing ei vasta. Kontrolli internetiühendust ja proovi uuesti.",
+    "osmCredit": "© OpenStreetMapi kaastöötajad",
+    "people": "Mitu inimest",
+    "alreadyGoing": "Juba olemas",
+    "total": "Kokku",
+    "fewer": "{{label}}: ühe võrra vähem",
+    "more": "{{label}}: ühe võrra rohkem",
+    "you": "Sina",
+    "seats": "Juba olemas {{going}} / {{total}}, vabu kohti {{free}}",
+    "cost": "Hind",
+    "costHintLabel": "Mida valikud tähendavad",
+    "costHint": "Jagame kulud: umbes nii palju maksab igaüks, näiteks laua rendi eest. Tasuline: osalemise hind. Raha liigub otse inimeste vahel, mitte äpi kaudu.",
+    "costTypes": {
+      "free": "Tasuta",
+      "split": "Jagame kulud",
+      "paid": "Tasuline"
+    },
+    "amount": "Summa inimese kohta eurodes",
+    "perPerson": "€ inimese kohta",
+    "languages": "Kohtumise keeled",
+    "chooseLanguages": "Vali keeled",
+    "changeLanguages": "Muuda kohtumise keeli",
+    "publish": "Avalda",
+    "preview": "Eelvaade",
+    "confirm": "Kinnita",
+    "sentTitle": "Kohtumine on ülevaatusel",
+    "sentBody": "Vaatame selle üle ja näitame siis voos.",
+    "ok": "Selge",
+    "errors": {
+      "hobby": "Vali hobi.",
+      "title": "Kirjuta pealkiri, vähemalt 3 tähemärki.",
+      "when": "Vali päev.",
+      "past": "See aeg on juba möödas. Vali hilisem.",
+      "place": "Vali koht.",
+      "amount": "Sisesta summa inimese kohta.",
+      "languages": "Vali vähemalt üks keel."
+    }
   },
   "profile": {
     "title": "Profiil",
@@ -108,6 +169,12 @@
       "hint": "Treeningud, klubi, võistlused"
     }
   },
+  "listingLevel": {
+    "any": "Igale tasemele",
+    "beginner": "Algajatele",
+    "experienced": "Kogenutele",
+    "pro": "Proffidele"
+  },
   "hobbies": {
     "levelQuestion": "Mis on sinu tase?",
     "noLevel": "Ilma tasemeta",
@@ -119,6 +186,7 @@
     "back": "Tagasi",
     "continue": "Edasi",
     "done": "Valmis",
+    "cancel": "Tühista",
     "errors": {
       "generic": "Midagi läks valesti. Proovi uuesti.",
       "network": "Ühendus puudub. Kontrolli internetti ja proovi uuesti."
@@ -160,8 +228,8 @@
         "respect": "Austa teisi: ei mingit solvamist, kiusamist ega diskrimineerimist.",
         "friendship": "Vibeish on sõpruse ja ühiste tegevuste jaoks. Ilma reklaami, rämpsposti ja müügita.",
         "safety": "Kohtu rahvarohketes kohtades, eriti esimesel korral.",
-        "ai": "Kuulutusi, profiile ja sõnumeid kontrollib tehisintellekt. Reegleid rikkuv sisu peidetakse ja korduvate rikkumiste eest konto blokeeritakse.",
-        "report": "Teata reeglite rikkujatest ja blokeeri neid. See on alati tasuta."
+        "ai": "Kohtumisi, profiile ja sõnumeid kontrollib tehisintellekt. Reegleid rikkuv sisu peidetakse ja korduvate rikkumiste eest konto blokeeritakse.",
+        "report": "Teata reeglite rikkujatest ja blokeeri neid."
       },
       "accept": "Nõustun reeglitega",
       "errors": {
@@ -187,7 +255,7 @@
     },
     "city": {
       "title": "Sinu linn",
-      "body": "Voos näed oma linna plaane.",
+      "body": "Voos näed oma linna kohtumisi.",
       "notListed": "Minu linna pole nimekirjas",
       "otherCity": "Mis linnas sa elad?",
       "otherCityHint": "Seal me veel ei tegutse. Paneme sinu linna kirja, et teada, kuhu edasi minna.",

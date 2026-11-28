@@ -26,7 +26,8 @@ export function Chip({ label, selected, onPress, role = 'radio' }: ChipProps) {
       style={({ pressed }) => pressed && styles.pressed}>
       <ThemedView
         type={selected ? 'backgroundSelected' : 'backgroundElement'}
-        style={[styles.chip, { borderColor: selected ? theme.text : 'transparent' }]}>
+        // The faint border keeps a chip visible where its background matches the surface, as in dialogs.
+        style={[styles.chip, { borderColor: selected ? theme.text : theme.border }]}>
         <ThemedText themeColor={selected ? 'text' : 'textSecondary'}>{label}</ThemedText>
       </ThemedView>
     </Pressable>

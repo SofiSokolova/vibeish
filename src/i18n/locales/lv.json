@@ -13,11 +13,11 @@
     "title": "Plūsma",
     "search": "Meklēt",
     "notifications": "Paziņojumi",
-    "mapSoon": "Drīzumā kartē redzēsi sludinājumus savā tuvumā.",
+    "mapSoon": "Drīzumā kartē redzēsi tikšanās savā tuvumā.",
     "filters": "Filtri",
     "city": "Pilsēta: {{city}}. Mainīt",
     "cityTitle": "Pilsēta",
-    "cityHint": "Vari apskatīt arī citas pilsētas sludinājumus, piemēram, pirms ceļojuma.",
+    "cityHint": "Vari apskatīt arī citas pilsētas tikšanās, piemēram, pirms ceļojuma.",
     "today": "Šodien",
     "weekend": "Nedēļas nogalē",
     "spots": "{{taken}}/{{total}} · brīvas vietas: {{left}}",
@@ -27,23 +27,84 @@
     "details": "Sīkāk",
     "nah": "NAH",
     "vibe": "VIBE",
-    "nahLabel": "Nah — izlaist",
-    "vibeLabel": "Vibe — pieteikties",
+    "nahLabel": "Nah: izlaist",
+    "vibeLabel": "Vibe: pieteikties",
     "sent": "Pieteikums nosūtīts",
-    "empty": "Šeit pagaidām vairāk sludinājumu nav. Ieskaties vēlāk vai izveido savu.",
-    "emptyFiltered": "Šīm dienām sludinājumu vēl nav. Izmēģini citu filtru.",
-    "createOwn": "Izveidot sludinājumu"
+    "empty": "Šeit pagaidām vairāk tikšanos nav. Ieskaties vēlāk vai izveido savu.",
+    "emptyFiltered": "Šīm dienām tikšanos vēl nav. Izmēģini citu filtru.",
+    "createOwn": "Izveidot tikšanos",
+    "dayTimeTbd": "{{day}} · laiku norunāsim čatā"
   },
   "meetups": {
     "title": "Manas tikšanās",
-    "body": "Tavi sludinājumi un pieteikumi vienuviet."
+    "body": "Tavas tikšanās un pieteikumi vienuviet."
   },
   "create": {
-    "title": "Jauns sludinājums",
-    "body": "Izvēlies hobiju, laiku un vietu — un atrodi kompāniju.",
-    "chooseHobby": "Izvēlies hobiju",
-    "groupRange": "Grupa: {{min}}–{{max}}",
-    "groupExact": "Grupa: {{size}}"
+    "title": "Jauna tikšanās",
+    "hobby": "Hobijs",
+    "chooseHobby": "Izvēlēties hobiju",
+    "changeHobby": "Mainīt hobiju",
+    "remember": "Atcerēties nākamajām tikšanās reizēm",
+    "level": "Kam",
+    "levelLabel": "Kam: {{level}}. Mainīt",
+    "name": "Nosaukums",
+    "details": "Sīkāk",
+    "detailsPlaceholder": "Ko ņemt līdzi, kur tieši tiekaties, ko gaidi",
+    "when": "Kad",
+    "chooseDay": "Izvēlēties dienu",
+    "whenLabel": "Kad: {{when}}. Mainīt",
+    "today": "Šodien",
+    "tomorrow": "Rīt",
+    "previousMonth": "Iepriekšējais mēnesis",
+    "nextMonth": "Nākamais mēnesis",
+    "time": "Laiks",
+    "hours": "Stundas",
+    "minutes": "Minūtes",
+    "timeInChat": "Laiku norunāsim čatā",
+    "where": "Kur",
+    "choosePlace": "Izvēlēties vietu",
+    "placeLabel": "Vieta: {{place}}. Mainīt",
+    "city": "Pilsēta",
+    "searchPlace": "Meklēt vietu",
+    "noPlaces": "Nekas netika atrasts. Izmēģini citu nosaukumu.",
+    "searchHint": "Sāc rakstīt vietas nosaukumu vai adresi.",
+    "searchFailed": "Vietu meklēšana neatbild. Pārbaudi internetu un mēģini vēlreiz.",
+    "osmCredit": "© OpenStreetMap dalībnieki",
+    "people": "Cik cilvēku",
+    "alreadyGoing": "Jau ir",
+    "total": "Kopā",
+    "fewer": "{{label}}: par vienu mazāk",
+    "more": "{{label}}: par vienu vairāk",
+    "you": "Tu",
+    "seats": "Jau ir {{going}} no {{total}}, brīvas vietas: {{free}}",
+    "cost": "Cena",
+    "costHintLabel": "Ko nozīmē varianti",
+    "costHint": "Dalām izmaksas: aptuvenā summa no cilvēka, piemēram, par galda nomu. Maksas: dalības cena. Nauda tiek nodota tieši, bez lietotnes.",
+    "costTypes": {
+      "free": "Bez maksas",
+      "split": "Dalām izmaksas",
+      "paid": "Maksas"
+    },
+    "amount": "Summa no cilvēka eiro",
+    "perPerson": "€ no cilvēka",
+    "languages": "Tikšanās valodas",
+    "chooseLanguages": "Izvēlēties valodas",
+    "changeLanguages": "Mainīt tikšanās valodas",
+    "publish": "Publicēt",
+    "preview": "Priekšskatījums",
+    "confirm": "Apstiprināt",
+    "sentTitle": "Tikšanās tiek pārbaudīta",
+    "sentBody": "Mēs to pārbaudīsim un tad parādīsim plūsmā.",
+    "ok": "Labi",
+    "errors": {
+      "hobby": "Izvēlies hobiju.",
+      "title": "Uzraksti nosaukumu, vismaz 3 rakstzīmes.",
+      "when": "Izvēlies dienu.",
+      "past": "Šis laiks jau ir pagājis. Izvēlies vēlāku.",
+      "place": "Izvēlies vietu.",
+      "amount": "Norādi summu no cilvēka.",
+      "languages": "Izvēlies vismaz vienu valodu."
+    }
   },
   "profile": {
     "title": "Profils",
@@ -108,6 +169,12 @@
       "hint": "Treniņi, klubs, sacensības"
     }
   },
+  "listingLevel": {
+    "any": "Jebkuram līmenim",
+    "beginner": "Iesācējiem",
+    "experienced": "Pieredzējušiem",
+    "pro": "Profiem"
+  },
   "hobbies": {
     "levelQuestion": "Kāds ir tavs līmenis?",
     "noLevel": "Bez līmeņa",
@@ -119,6 +186,7 @@
     "back": "Atpakaļ",
     "continue": "Tālāk",
     "done": "Gatavs",
+    "cancel": "Atcelt",
     "errors": {
       "generic": "Kaut kas nogāja greizi. Mēģini vēlreiz.",
       "network": "Nav savienojuma. Pārbaudi internetu un mēģini vēlreiz."
@@ -160,8 +228,8 @@
         "respect": "Izturies ar cieņu pret citiem: nekādu apvainojumu, ņirgāšanās vai diskriminācijas.",
         "friendship": "Vibeish ir draudzībai un kopīgām nodarbēm. Bez reklāmas, surogātpasta un pārdošanas.",
         "safety": "Satiecies ļaužu pilnās vietās, īpaši pirmajā reizē.",
-        "ai": "Sludinājumus, profilus un ziņas pārbauda mākslīgais intelekts. Noteikumu pārkāpumi tiek paslēpti, un par atkārtotiem pārkāpumiem konts tiek bloķēts.",
-        "report": "Ziņo par noteikumu pārkāpējiem un bloķē viņus. Tas vienmēr ir bez maksas."
+        "ai": "Tikšanās, profilus un ziņas pārbauda mākslīgais intelekts. Noteikumu pārkāpumi tiek paslēpti, un par atkārtotiem pārkāpumiem konts tiek bloķēts.",
+        "report": "Ziņo par noteikumu pārkāpējiem un bloķē viņus."
       },
       "accept": "Piekrītu noteikumiem",
       "errors": {
@@ -187,7 +255,7 @@
     },
     "city": {
       "title": "Tava pilsēta",
-      "body": "Plūsmā redzēsi plānus no savas pilsētas.",
+      "body": "Plūsmā redzēsi tikšanās no savas pilsētas.",
       "notListed": "Manas pilsētas nav sarakstā",
       "otherCity": "Kurā pilsētā tu dzīvo?",
       "otherCityHint": "Tur mēs vēl nedarbojamies. Pierakstīsim tavu pilsētu, lai zinātu, kur paplašināties tālāk.",

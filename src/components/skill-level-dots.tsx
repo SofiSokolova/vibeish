@@ -3,7 +3,8 @@ import { StyleSheet, View } from 'react-native';
 import { SKILL_LEVELS, type SkillLevel } from '@/constants/skill-levels';
 
 type SkillLevelDotsProps = {
-  level: SkillLevel;
+  /** Null leaves every dot empty: a meetup open to any level. */
+  level: SkillLevel | null;
   color: string;
   /** The width of one dot. */
   size?: number;
@@ -17,7 +18,7 @@ export function SkillLevelDots({ level, color, size = 7, glow = false }: SkillLe
   return (
     <View aria-hidden style={[styles.dots, { gap: large ? 4 : 3 }]}>
       {SKILL_LEVELS.map(({ value }) => {
-        const filled = value <= level;
+        const filled = level !== null && value <= level;
         return (
           <View
             key={value}

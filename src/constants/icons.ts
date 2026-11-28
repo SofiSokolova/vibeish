@@ -20,4 +20,11 @@ export const ICONS = {
   hobby: { ios: 'sparkles', android: 'interests', web: 'interests' },
   nah: { ios: 'xmark', android: 'close', web: 'close' },
   vibe: { ios: 'bolt.fill', android: 'bolt', web: 'bolt' },
+  // The create form.
+  edit: { ios: 'pencil', android: 'edit', web: 'edit' },
+  calendar: { ios: 'calendar', android: 'calendar_today', web: 'calendar_today' },
+  previous: { ios: 'chevron.left', android: 'chevron_left', web: 'chevron_left' },
+  minus: { ios: 'minus', android: 'remove', web: 'remove' },
+  person: { ios: 'person.fill', android: 'person', web: 'person' },
+  check: { ios: 'checkmark', android: 'check', web: 'check' },
 } satisfies Record<string, IconName>;

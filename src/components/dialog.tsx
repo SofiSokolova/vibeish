@@ -17,6 +17,8 @@ type DialogProps = {
   /** Text of the button at the bottom, which closes the dialog. */
   closeLabel: string;
   onClose: () => void;
+  /** A main action above the close button, such as confirming. */
+  action?: { label: string; onPress: () => void; loading?: boolean };
   children: ReactNode;
 };
 
@@ -25,16 +27,21 @@ type DialogProps = {
  * button that closes it. A tap outside, the Android back button or Escape on the web
  * closes it too. Used for whole lists to choose from, such as every language.
  */
-export function Dialog({ visible, title, closeLabel, onClose, children }: DialogProps) {
+export function Dialog({ visible, title, closeLabel, onClose, action, children }: DialogProps) {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  // Nothing closes the dialog while its action is running.
+  const busy = action?.loading ?? false;
+  const close = () => {
+    if (!busy) onClose();
+  };
 
   return (
     <Modal
       visible={visible}
       transparent
       animationType="fade"
-      onRequestClose={onClose}
+      onRequestClose={close}
       statusBarTranslucent
       navigationBarTranslucent>
       <View
@@ -47,12 +54,12 @@ export function Dialog({ visible, title, closeLabel, onClose, children }: Dialog
             paddingRight: insets.right + Spacing.three,
           },
         ]}>
-        <Pressable style={StyleSheet.absoluteFill} onPress={onClose} accessible={false} focusable={false} />
+        <Pressable style={StyleSheet.absoluteFill} onPress={close} accessible={false} focusable={false} />
         <View
           role="dialog"
           aria-modal
           aria-label={title}
-          onAccessibilityEscape={onClose}
+          onAccessibilityEscape={close}
           style={[styles.card, { backgroundColor: theme.popover, borderColor: theme.backgroundSelected }]}>
           <ThemedText style={styles.title}>{title}</ThemedText>
           <ScrollView
@@ -61,7 +68,17 @@ export function Dialog({ visible, title, closeLabel, onClose, children }: Dialog
             keyboardShouldPersistTaps="handled">
             {children}
           </ScrollView>
-          <Button title={closeLabel} onPress={onClose} />
+          <View style={styles.actions}>
+            {action ? (
+              <Button variant="accent" title={action.label} loading={action.loading} onPress={action.onPress} />
+            ) : null}
+            <Button
+              variant={action ? 'secondary' : 'primary'}
+              title={closeLabel}
+              disabled={busy}
+              onPress={close}
+            />
+          </View>
         </View>
       </View>
     </Modal>
@@ -97,5 +114,8 @@ const styles = StyleSheet.create({
   },
   bodyContent: {
     gap: Spacing.three,
+  },
+  actions: {
+    gap: Spacing.two,
   },
 });

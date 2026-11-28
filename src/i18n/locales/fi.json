@@ -13,11 +13,11 @@
     "title": "Syöte",
     "search": "Haku",
     "notifications": "Ilmoitukset",
-    "mapSoon": "Pian näet lähelläsi olevat ilmoitukset kartalla.",
+    "mapSoon": "Pian näet lähelläsi olevat tapaamiset kartalla.",
     "filters": "Suodattimet",
     "city": "Kaupunki: {{city}}. Vaihda",
     "cityTitle": "Kaupunki",
-    "cityHint": "Voit katsoa myös toisen kaupungin ilmoituksia, esimerkiksi ennen matkaa.",
+    "cityHint": "Voit katsoa myös toisen kaupungin tapaamisia, esimerkiksi ennen matkaa.",
     "today": "Tänään",
     "weekend": "Viikonloppuna",
     "spots": "{{taken}}/{{total}} · vapaita paikkoja: {{left}}",
@@ -27,23 +27,84 @@
     "details": "Lisätietoja",
     "nah": "NAH",
     "vibe": "VIBE",
-    "nahLabel": "Nah — ohita",
-    "vibeLabel": "Vibe — pyydä päästä mukaan",
+    "nahLabel": "Nah: ohita",
+    "vibeLabel": "Vibe: pyydä päästä mukaan",
     "sent": "Pyyntö lähetetty",
-    "empty": "Täällä ei ole juuri nyt enempää ilmoituksia. Katso myöhemmin uudelleen tai luo oma.",
-    "emptyFiltered": "Näille päiville ei ole vielä ilmoituksia. Kokeile toista suodatinta.",
-    "createOwn": "Luo ilmoitus"
+    "empty": "Täällä ei ole juuri nyt enempää tapaamisia. Katso myöhemmin uudelleen tai luo oma.",
+    "emptyFiltered": "Näille päiville ei ole vielä tapaamisia. Kokeile toista suodatinta.",
+    "createOwn": "Luo tapaaminen",
+    "dayTimeTbd": "{{day}} · aika sovitaan chatissa"
   },
   "meetups": {
     "title": "Omat tapaamiset",
-    "body": "Omat ilmoituksesi ja liittymispyyntösi samassa paikassa."
+    "body": "Omat tapaamisesi ja liittymispyyntösi samassa paikassa."
   },
   "create": {
-    "title": "Uusi ilmoitus",
-    "body": "Valitse harrastus, aika ja paikka – ja löydä seuraa.",
+    "title": "Uusi tapaaminen",
+    "hobby": "Harrastus",
     "chooseHobby": "Valitse harrastus",
-    "groupRange": "Ryhmä: {{min}}–{{max}}",
-    "groupExact": "Ryhmä: {{size}}"
+    "changeHobby": "Vaihda harrastus",
+    "remember": "Muista seuraavia tapaamisia varten",
+    "level": "Kenelle",
+    "levelLabel": "Kenelle: {{level}}. Vaihda",
+    "name": "Otsikko",
+    "details": "Lisätiedot",
+    "detailsPlaceholder": "Mitä ottaa mukaan, missä tarkalleen tapaatte, keitä odotat",
+    "when": "Milloin",
+    "chooseDay": "Valitse päivä",
+    "whenLabel": "Milloin: {{when}}. Vaihda",
+    "today": "Tänään",
+    "tomorrow": "Huomenna",
+    "previousMonth": "Edellinen kuukausi",
+    "nextMonth": "Seuraava kuukausi",
+    "time": "Kellonaika",
+    "hours": "Tunnit",
+    "minutes": "Minuutit",
+    "timeInChat": "Sovitaan aika chatissa",
+    "where": "Missä",
+    "choosePlace": "Valitse paikka",
+    "placeLabel": "Paikka: {{place}}. Vaihda",
+    "city": "Kaupunki",
+    "searchPlace": "Hae paikkaa",
+    "noPlaces": "Mitään ei löytynyt. Kokeile toista nimeä.",
+    "searchHint": "Ala kirjoittaa paikan nimeä tai osoitetta.",
+    "searchFailed": "Paikkahaku ei vastaa. Tarkista internetyhteys ja yritä uudelleen.",
+    "osmCredit": "© OpenStreetMapin tekijät",
+    "people": "Montako ihmistä",
+    "alreadyGoing": "Jo mukana",
+    "total": "Yhteensä",
+    "fewer": "{{label}}: yksi vähemmän",
+    "more": "{{label}}: yksi lisää",
+    "you": "Sinä",
+    "seats": "Jo mukana {{going}}/{{total}}, vapaana {{free}}",
+    "cost": "Hinta",
+    "costHintLabel": "Mitä vaihtoehdot tarkoittavat",
+    "costHint": "Jaetaan kulut: suunnilleen se, mitä kukin maksaa, esimerkiksi pöydän vuokrasta. Maksullinen: osallistumisen hinta. Rahat siirtyvät suoraan ihmisten välillä, eivät sovelluksen kautta.",
+    "costTypes": {
+      "free": "Ilmainen",
+      "split": "Jaetaan kulut",
+      "paid": "Maksullinen"
+    },
+    "amount": "Summa henkilöä kohden euroina",
+    "perPerson": "€ / henkilö",
+    "languages": "Tapaamisen kielet",
+    "chooseLanguages": "Valitse kielet",
+    "changeLanguages": "Vaihda tapaamisen kielet",
+    "publish": "Julkaise",
+    "preview": "Esikatselu",
+    "confirm": "Vahvista",
+    "sentTitle": "Tapaaminen on tarkistettavana",
+    "sentBody": "Tarkistamme sen ja näytämme sen sitten syötteessä.",
+    "ok": "Selvä",
+    "errors": {
+      "hobby": "Valitse harrastus.",
+      "title": "Kirjoita otsikko, vähintään 3 merkkiä.",
+      "when": "Valitse päivä.",
+      "past": "Tämä aika on jo mennyt. Valitse myöhäisempi.",
+      "place": "Valitse paikka.",
+      "amount": "Anna summa henkilöä kohden.",
+      "languages": "Valitse vähintään yksi kieli."
+    }
   },
   "profile": {
     "title": "Profiili",
@@ -108,6 +169,12 @@
       "hint": "Treenit, seura, kilpailut"
     }
   },
+  "listingLevel": {
+    "any": "Kaikille tasoille",
+    "beginner": "Aloittelijoille",
+    "experienced": "Kokeneille",
+    "pro": "Proille"
+  },
   "hobbies": {
     "levelQuestion": "Mikä on tasosi?",
     "noLevel": "Ei tasoa",
@@ -119,6 +186,7 @@
     "back": "Takaisin",
     "continue": "Jatka",
     "done": "Valmis",
+    "cancel": "Peruuta",
     "errors": {
       "generic": "Jokin meni pieleen. Yritä uudelleen.",
       "network": "Ei yhteyttä. Tarkista internetyhteys ja yritä uudelleen."
@@ -160,8 +228,8 @@
         "respect": "Kunnioita muita: ei loukkauksia, kiusaamista eikä syrjintää.",
         "friendship": "Vibeish on ystävyyttä ja yhteistä tekemistä varten. Ei mainoksia, roskapostia eikä myyntiä.",
         "safety": "Tapaa vilkkailla julkisilla paikoilla, varsinkin ensimmäisellä kerralla.",
-        "ai": "Tekoäly tarkistaa ilmoitukset, profiilit ja viestit. Sääntöjä rikkova sisältö piilotetaan, ja toistuvista rikkeistä tili estetään.",
-        "report": "Ilmoita sääntöjen rikkojista ja estä heidät. Se on aina maksutonta."
+        "ai": "Tekoäly tarkistaa tapaamiset, profiilit ja viestit. Sääntöjä rikkova sisältö piilotetaan, ja toistuvista rikkeistä tili estetään.",
+        "report": "Ilmoita sääntöjen rikkojista ja estä heidät."
       },
       "accept": "Hyväksyn säännöt",
       "errors": {
@@ -187,7 +255,7 @@
     },
     "city": {
       "title": "Kaupunkisi",
-      "body": "Syötteessäsi näkyy suunnitelmia omasta kaupungistasi.",
+      "body": "Syötteessäsi näkyy tapaamisia omasta kaupungistasi.",
       "notListed": "Kaupunkini ei ole listalla",
       "otherCity": "Missä kaupungissa asut?",
       "otherCityHint": "Emme ole vielä siellä. Kirjaamme kaupunkisi ylös, jotta tiedämme, minne laajentaa seuraavaksi.",

@@ -9,22 +9,34 @@ type TextFieldProps = TextInputProps & {
   /** Shown under the field while there is no error. */
   hint?: string;
   error?: string | null;
+  /** Shown at the end of the label's line, such as how many characters are used. */
+  counter?: string;
 };
 
 /** A labelled text input with an optional hint or error underneath. */
-export function TextField({ label, hint, error, style, ...props }: TextFieldProps) {
+export function TextField({ label, hint, error, counter, style, ...props }: TextFieldProps) {
   const theme = useTheme();
   const note = error ?? hint;
 
   return (
     <View style={styles.field}>
-      <ThemedText type="smallBold">{label}</ThemedText>
+      <View style={styles.labelRow}>
+        <ThemedText type="smallBold" style={styles.label}>
+          {label}
+        </ThemedText>
+        {counter ? (
+          <ThemedText type="small" themeColor="textSecondary" aria-hidden>
+            {counter}
+          </ThemedText>
+        ) : null}
+      </View>
       <TextInput
         accessibilityLabel={label}
         accessibilityHint={note ?? undefined}
         placeholderTextColor={theme.textSecondary}
         style={[
           styles.input,
+          props.multiline && styles.multiline,
           {
             color: theme.text,
             backgroundColor: theme.backgroundElement,
@@ -50,6 +62,14 @@ const styles = StyleSheet.create({
   field: {
     gap: Spacing.two,
   },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: Spacing.three,
+  },
+  label: {
+    flex: 1,
+  },
   input: {
     minHeight: 48,
     paddingVertical: Spacing.two,
@@ -58,5 +78,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     fontFamily: Fonts.sans,
     fontSize: 16,
+  },
+  multiline: {
+    minHeight: 104,
+    paddingVertical: Spacing.three,
+    textAlignVertical: 'top',
   },
 });

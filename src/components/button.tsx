@@ -2,23 +2,38 @@ import { ActivityIndicator, Pressable, StyleSheet, type PressableProps } from 'r
 
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+import { useEffects, useTheme } from '@/hooks/use-theme';
 
 type ButtonProps = Omit<PressableProps, 'children' | 'style'> & {
   title: string;
-  /** `primary` for the main action of a screen, `secondary` for others, `link` for quiet text actions. */
-  variant?: 'primary' | 'secondary' | 'link';
+  /**
+   * `primary` for the main action of a screen, `accent` for one in the neon gradient (such as
+   * publishing a meetup), `secondary` for others, `link` for quiet text actions.
+   */
+  variant?: 'primary' | 'accent' | 'secondary' | 'link';
   /** Shows a spinner and ignores presses while an action is running. */
   loading?: boolean;
 };
 
 export function Button({ title, variant = 'primary', loading = false, disabled, ...props }: ButtonProps) {
   const theme = useTheme();
+  const fx = useEffects();
   const inactive = Boolean(disabled) || loading;
 
   const background =
-    variant === 'primary' ? theme.text : variant === 'secondary' ? theme.backgroundElement : 'transparent';
-  const color = variant === 'primary' ? theme.background : variant === 'secondary' ? theme.text : theme.textSecondary;
+    variant === 'primary'
+      ? theme.text
+      : variant === 'secondary'
+        ? theme.backgroundElement
+        : 'transparent';
+  const color =
+    variant === 'primary'
+      ? theme.background
+      : variant === 'accent'
+        ? fx.create.icon
+        : variant === 'secondary'
+          ? theme.text
+          : theme.textSecondary;
 
   return (
     <Pressable
@@ -30,6 +45,7 @@ export function Button({ title, variant = 'primary', loading = false, disabled, 
       style={({ pressed }) => [
         variant === 'link' ? styles.link : styles.button,
         { backgroundColor: background },
+        variant === 'accent' && { backgroundImage: fx.create.background },
         pressed && styles.pressed,
         Boolean(disabled) && !loading && styles.disabled,
       ]}
@@ -39,7 +55,7 @@ export function Button({ title, variant = 'primary', loading = false, disabled, 
       ) : (
         <ThemedText
           type={variant === 'link' ? 'small' : 'default'}
-          style={[{ color }, variant === 'link' && styles.linkText]}>
+          style={[{ color }, variant === 'link' && styles.linkText, variant === 'accent' && styles.accentText]}>
           {title}
         </ThemedText>
       )}
@@ -64,6 +80,9 @@ const styles = StyleSheet.create({
   },
   linkText: {
     textDecorationLine: 'underline',
+  },
+  accentText: {
+    fontWeight: 800,
   },
   pressed: {
     opacity: 0.7,

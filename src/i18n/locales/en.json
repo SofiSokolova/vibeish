@@ -13,11 +13,11 @@
     "title": "Feed",
     "search": "Search",
     "notifications": "Notifications",
-    "mapSoon": "Soon you’ll see listings near you on a map.",
+    "mapSoon": "Soon you’ll see meetups near you on a map.",
     "filters": "Filters",
     "city": "City: {{city}}. Change",
     "cityTitle": "City",
-    "cityHint": "You can look at listings in another city too, for example before a trip.",
+    "cityHint": "You can look at meetups in another city too, for example before a trip.",
     "today": "Today",
     "weekend": "This weekend",
     "spots": "{{taken}}/{{total}} · open spots: {{left}}",
@@ -27,23 +27,84 @@
     "details": "Details",
     "nah": "NAH",
     "vibe": "VIBE",
-    "nahLabel": "Nah — skip",
-    "vibeLabel": "Vibe — ask to join",
+    "nahLabel": "Nah: skip",
+    "vibeLabel": "Vibe: ask to join",
     "sent": "Request sent",
-    "empty": "No more listings here for now. Check back later or create your own.",
-    "emptyFiltered": "No listings for these days yet. Try another filter.",
-    "createOwn": "Create a listing"
+    "empty": "No more meetups here for now. Check back later or create your own.",
+    "emptyFiltered": "No meetups for these days yet. Try another filter.",
+    "createOwn": "Create a meetup",
+    "dayTimeTbd": "{{day}} · time agreed in the chat"
   },
   "meetups": {
     "title": "My meetups",
-    "body": "Your listings and your requests to join, all in one place."
+    "body": "Your meetups and your requests to join, all in one place."
   },
   "create": {
-    "title": "New listing",
-    "body": "Pick a hobby, a time and a place, and find company.",
+    "title": "New meetup",
+    "hobby": "Hobby",
     "chooseHobby": "Choose a hobby",
-    "groupRange": "Group: {{min}}–{{max}}",
-    "groupExact": "Group: {{size}}"
+    "changeHobby": "Change the hobby",
+    "remember": "Remember for my next meetups",
+    "level": "Who it's for",
+    "levelLabel": "Who it's for: {{level}}. Change",
+    "name": "Title",
+    "details": "Details",
+    "detailsPlaceholder": "What to bring, where exactly you meet, who you're hoping to see",
+    "when": "When",
+    "chooseDay": "Choose a day",
+    "whenLabel": "When: {{when}}. Change",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "time": "Time",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "timeInChat": "We'll agree on the time in the chat",
+    "where": "Where",
+    "choosePlace": "Choose a place",
+    "placeLabel": "Place: {{place}}. Change",
+    "city": "City",
+    "searchPlace": "Search for a place",
+    "noPlaces": "Nothing found. Try another name.",
+    "searchHint": "Start typing a place or an address.",
+    "searchFailed": "Place search isn't answering. Check your internet and try again.",
+    "osmCredit": "© OpenStreetMap contributors",
+    "people": "How many people",
+    "alreadyGoing": "Already going",
+    "total": "In total",
+    "fewer": "{{label}}: one fewer",
+    "more": "{{label}}: one more",
+    "you": "You",
+    "seats": "{{going}} of {{total}} already going, {{free}} free",
+    "cost": "Cost",
+    "costHintLabel": "What the options mean",
+    "costHint": "Chip in: roughly what each person pays, for example for renting a table. Paid: the price to take part. Money goes directly between people, not through the app.",
+    "costTypes": {
+      "free": "Free",
+      "split": "Chip in",
+      "paid": "Paid"
+    },
+    "amount": "Amount per person in euros",
+    "perPerson": "€ per person",
+    "languages": "Meetup languages",
+    "chooseLanguages": "Choose languages",
+    "changeLanguages": "Change the meetup languages",
+    "publish": "Publish",
+    "preview": "Preview",
+    "confirm": "Confirm",
+    "sentTitle": "Your meetup is being reviewed",
+    "sentBody": "We'll check it and then show it in the feed.",
+    "ok": "OK",
+    "errors": {
+      "hobby": "Choose a hobby.",
+      "title": "Write a title of at least 3 characters.",
+      "when": "Choose a day.",
+      "past": "This time has already passed. Choose a later one.",
+      "place": "Choose a place.",
+      "amount": "Enter the amount per person.",
+      "languages": "Choose at least one language."
+    }
   },
   "profile": {
     "title": "Profile",
@@ -108,6 +169,12 @@
       "hint": "Training, a club, competitions"
     }
   },
+  "listingLevel": {
+    "any": "Any level",
+    "beginner": "For beginners",
+    "experienced": "For the experienced",
+    "pro": "For pros"
+  },
   "hobbies": {
     "levelQuestion": "What's your level?",
     "noLevel": "No level",
@@ -119,6 +186,7 @@
     "back": "Back",
     "continue": "Continue",
     "done": "Done",
+    "cancel": "Cancel",
     "errors": {
       "generic": "Something went wrong. Please try again.",
       "network": "No connection. Check your internet and try again."
@@ -160,8 +228,8 @@
         "respect": "Respect others: no insults, bullying or discrimination.",
         "friendship": "Vibeish is for friendship and shared activities. No ads, spam or selling.",
         "safety": "Meet in busy public places, especially the first time.",
-        "ai": "AI checks listings, profiles and messages. Anything that breaks the rules is hidden, and repeat offenders get their account blocked.",
-        "report": "Report and block anyone who breaks the rules. It's always free."
+        "ai": "AI checks meetups, profiles and messages. Anything that breaks the rules is hidden, and repeat offenders get their account blocked.",
+        "report": "Report and block anyone who breaks the rules."
       },
       "accept": "I accept the rules",
       "errors": {
@@ -187,7 +255,7 @@
     },
     "city": {
       "title": "Your city",
-      "body": "Your feed will show plans from your city.",
+      "body": "Your feed will show meetups from your city.",
       "notListed": "My city isn't listed",
       "otherCity": "Which city?",
       "otherCityHint": "We're not there yet. We'll note your city so we know where to go next.",
