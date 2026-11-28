@@ -234,8 +234,9 @@ secure_password_change = false
 # require_current_password = true
 # Controls the minimum amount of time that must pass before sending another signup confirmation or password reset email.
 max_frequency = "1s"
-# Number of characters used in the email OTP.
-otp_length = 6
+# Number of characters used in the email OTP. The app asks for 8 digits (CODE_LENGTH in
+# src/app/sign-in.tsx), as the hosted project sends.
+otp_length = 8
 # Number of seconds before the email OTP expires (defaults to 1 hour).
 otp_expiry = 3600
 
@@ -253,6 +254,16 @@ otp_expiry = 3600
 # [auth.email.template.invite]
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
+
+# Local sign-in emails show the code the app asks for; they land in the local mail catcher
+# (http://127.0.0.1:54324). The hosted project keeps its own templates.
+[auth.email.template.magic_link]
+subject = "Your Vibeish code"
+content_path = "./supabase/templates/sign-in-code.html"
+
+[auth.email.template.confirmation]
+subject = "Your Vibeish code"
+content_path = "./supabase/templates/sign-in-code.html"
 
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
@@ -398,7 +409,8 @@ deno_version = 2
 # secret_key = "env(SECRET_VALUE)"
 
 [analytics]
-enabled = true
+# Off to keep the local stack light; tests don't need the log explorer.
+enabled = false
 port = 54327
 # Configure one of the supported backends: `postgres`, `bigquery`.
 backend = "postgres"

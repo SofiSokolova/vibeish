@@ -2,6 +2,7 @@
 import 'expo-sqlite/localStorage/install';
 
 import { createClient } from '@supabase/supabase-js';
+import Constants from 'expo-constants';
 import { AppState, Platform } from 'react-native';
 
 // Generated from the linked project with `npm run db:types`; regenerate after every migration.
@@ -17,7 +18,18 @@ if (!supabaseUrl || !supabasePublishableKey) {
   );
 }
 
-export const supabase = createClient<Database>(supabaseUrl, supabasePublishableKey, {
+/**
+ * In development the database may run on this computer (`npx supabase start`, set up in
+ * .env.development.local). A phone can't reach it at 127.0.0.1, so it uses the computer's address
+ * on the network, the one it loads the app from.
+ */
+function reachableUrl(url: string): string {
+  if (!__DEV__ || Platform.OS === 'web') return url;
+  const devHost = Constants.expoConfig?.hostUri?.split(':')[0];
+  return devHost ? url.replace(/\/\/(127\.0\.0\.1|localhost)(?=[:/]|$)/, `//${devHost}`) : url;
+}
+
+export const supabase = createClient<Database>(reachableUrl(supabaseUrl), supabasePublishableKey, {
   auth: {
     storage: localStorage,
     autoRefreshToken: true,
