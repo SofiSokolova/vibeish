@@ -286,6 +286,7 @@ export type Database = {
       listings: {
         Row: {
           accepted_count: number
+          already_going: number
           author_id: string
           category: string
           city: string
@@ -295,7 +296,6 @@ export type Database = {
           description: string
           duration_minutes: number | null
           group_max: number
-          group_min: number
           id: string
           languages: string[]
           lat: number
@@ -303,13 +303,16 @@ export type Database = {
           moderation_reason: string | null
           moderation_status: string
           place_name: string
+          skill_level: number | null
           starts_at: string
           status: string
+          time_tbd: boolean
           title: string
           updated_at: string
         }
         Insert: {
           accepted_count?: number
+          already_going?: number
           author_id?: string
           category: string
           city: string
@@ -319,7 +322,6 @@ export type Database = {
           description?: string
           duration_minutes?: number | null
           group_max: number
-          group_min: number
           id?: string
           languages?: string[]
           lat: number
@@ -327,13 +329,16 @@ export type Database = {
           moderation_reason?: string | null
           moderation_status?: string
           place_name: string
+          skill_level?: number | null
           starts_at: string
           status?: string
+          time_tbd?: boolean
           title: string
           updated_at?: string
         }
         Update: {
           accepted_count?: number
+          already_going?: number
           author_id?: string
           category?: string
           city?: string
@@ -343,7 +348,6 @@ export type Database = {
           description?: string
           duration_minutes?: number | null
           group_max?: number
-          group_min?: number
           id?: string
           languages?: string[]
           lat?: number
@@ -351,8 +355,10 @@ export type Database = {
           moderation_reason?: string | null
           moderation_status?: string
           place_name?: string
+          skill_level?: number | null
           starts_at?: string
           status?: string
+          time_tbd?: boolean
           title?: string
           updated_at?: string
         }
@@ -825,6 +831,26 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      create_listing: {
+        Args: {
+          p_already_going: number
+          p_category: string
+          p_city: string
+          p_cost_eur: number
+          p_cost_type: string
+          p_day: string
+          p_description: string
+          p_group_max: number
+          p_languages: string[]
+          p_lat: number
+          p_lng: number
+          p_place_name: string
+          p_skill_level: number
+          p_time: string
+          p_title: string
+        }
+        Returns: string
+      }
       decline_application: {
         Args: { p_application_id: string }
         Returns: undefined
@@ -851,14 +877,15 @@ export type Database = {
           distance_km: number
           duration_minutes: number
           group_max: number
-          group_min: number
           id: string
           languages: string[]
           lat: number
           lng: number
           place_name: string
+          skill_level: number
           spots_left: number
           starts_at: string
+          time_tbd: boolean
           title: string
         }[]
       }

@@ -83,6 +83,8 @@ const KADRIORG = { lat: 59.4383, lng: 24.79 };
 const TALLINN = { lat: 59.437, lng: 24.7536 };
 const HELSINKI = { lat: 60.1699, lng: 24.9384 };
 const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+// A day as the create form sends it, far enough ahead to be upcoming in any time zone.
+const inTwoDays = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
 function yearsAgo(years) {
   const date = new Date();
@@ -135,7 +137,6 @@ function insertListing(fields = {}) {
     place_name: 'Kadriorg park',
     lat: KADRIORG.lat,
     lng: KADRIORG.lng,
-    group_min: 2,
     group_max: 3,
     ...fields,
   };
@@ -144,6 +145,49 @@ function insertListing(fields = {}) {
   return run(
     `insert into public.listings (${columns.join(', ')}) values (${placeholders.join(', ')}) returning *`,
     Object.values(listing)
+  );
+}
+
+/** Makes a meetup the way the create form does. */
+function createListing(fields = {}) {
+  const form = {
+    category: 'board_games',
+    skill_level: null,
+    title: 'Board games and pizza',
+    description: '  Bring a friend  ',
+    day: inTwoDays,
+    time: '18:30',
+    city: 'tallinn',
+    place_name: ' Telliskivi ',
+    lat: 59.4405,
+    lng: 24.7286,
+    already_going: 2,
+    group_max: 6,
+    cost_type: 'split',
+    cost_eur: 10,
+    languages: '{et,en}',
+    ...fields,
+  };
+  return run(
+    `select public.create_listing($1, $2::smallint, $3, $4, $5::date, $6::time, $7, $8, $9, $10,
+                                  $11::smallint, $12::smallint, $13, $14::numeric, $15::text[]) as id`,
+    [
+      form.category,
+      form.skill_level,
+      form.title,
+      form.description,
+      form.day,
+      form.time,
+      form.city,
+      form.place_name,
+      form.lat,
+      form.lng,
+      form.already_going,
+      form.group_max,
+      form.cost_type,
+      form.cost_eur,
+      form.languages,
+    ]
   );
 }
 
@@ -423,6 +467,52 @@ await test('banned users cannot create listings', () =>
   as('erin', () => fails(insertListing(), /row-level security/))
 );
 
+await test("the create form sets the time in the meetup's city, who it is for and who comes along", async () => {
+  const [{ id }] = await as('alice', () => createListing({ skill_level: 1 }));
+  const [row] = await run(
+    `select starts_at = ($2::date + time '18:30') at time zone 'Europe/Tallinn' as local_time,
+            time_tbd, skill_level, already_going, group_max, description, place_name, moderation_status
+       from public.listings where id = $1`,
+    [id, inTwoDays]
+  );
+  assert.deepEqual(row, {
+    local_time: true,
+    time_tbd: false,
+    skill_level: 1,
+    already_going: 2,
+    group_max: 6,
+    description: 'Bring a friend',
+    place_name: 'Telliskivi',
+    moderation_status: 'pending',
+  });
+});
+
+await test('a meetup whose time is agreed in the chat stays upcoming the whole day', async () => {
+  const [{ id }] = await as('alice', () => createListing({ time: null }));
+  const [row] = await run(
+    `select time_tbd, starts_at = ($2::date + time '23:59') at time zone 'Europe/Tallinn' as end_of_day
+       from public.listings where id = $1`,
+    [id, inTwoDays]
+  );
+  assert.deepEqual(row, { time_tbd: true, end_of_day: true });
+});
+
+await test('a meetup needs at least one free spot', () =>
+  as('alice', () => fails(createListing({ already_going: 4, group_max: 4 }), /no_free_spots/))
+);
+
+await test('a meetup is made only in a city from the list', () =>
+  as('alice', () => fails(createListing({ city: 'paris' }), /unknown_city/))
+);
+
+await test('a meetup is for a level from 1 to 3 or for any level', () =>
+  as('alice', () => fails(createListing({ skill_level: 4 }), /listings_skill_level_check/))
+);
+
+await test('banned users cannot make meetups with the form either', () =>
+  as('erin', () => fails(createListing(), /row-level security/))
+);
+
 await test('an approved listing shows up in the feed of people nearby', async () => {
   await as('dave', () => run(`select public.admin_moderate_listing($1, 'approved')`, [listing.id]));
   const rows = await as('bob', () => feed());
@@ -502,13 +592,32 @@ await test('accepting an applicant opens a chat for both', async () => {
 
 await test('a full listing takes nobody else', async () => {
   const [chess] = await as('alice', () =>
-    insertListing({ category: 'chess', title: 'Chess in the old town', group_min: 2, group_max: 2 })
+    insertListing({ category: 'chess', title: 'Chess in the old town', group_max: 2 })
   );
   await as('dave', () => run(`select public.admin_moderate_listing($1, 'approved')`, [chess.id]));
   await as('bob', () => run(`select public.swipe_listing($1, 'right')`, [chess.id]));
   await as('carol', () => run(`select public.swipe_listing($1, 'right')`, [chess.id]));
   const applications = await as('alice', () =>
     run('select id, applicant_id from public.applications where listing_id = $1', [chess.id])
+  );
+  const byApplicant = Object.fromEntries(applications.map((row) => [row.applicant_id, row.id]));
+  await as('alice', () => run('select public.accept_application($1)', [byApplicant[users.bob]]));
+  await as('alice', () =>
+    fails(run('select public.accept_application($1)', [byApplicant[users.carol]]), /listing_full/)
+  );
+});
+
+await test('friends the author brings along take spots too', async () => {
+  const [{ id }] = await as('alice', () =>
+    createListing({ title: 'Board games with friends', already_going: 3, group_max: 4 })
+  );
+  await as('dave', () => run(`select public.admin_moderate_listing($1, 'approved')`, [id]));
+  const offered = (await as('bob', () => feed())).find((row) => row.id === id);
+  assert.equal(offered?.spots_left, 1);
+  await as('bob', () => run(`select public.swipe_listing($1, 'right')`, [id]));
+  await as('carol', () => run(`select public.swipe_listing($1, 'right')`, [id]));
+  const applications = await as('alice', () =>
+    run('select id, applicant_id from public.applications where listing_id = $1', [id])
   );
   const byApplicant = Object.fromEntries(applications.map((row) => [row.applicant_id, row.id]));
   await as('alice', () => run('select public.accept_application($1)', [byApplicant[users.bob]]));
@@ -724,11 +833,11 @@ await test('categories match src/constants/categories.ts', async () => {
 
 await test('cities match src/constants/cities.ts', async () => {
   const source = readFileSync(path.join(root, 'src', 'constants', 'cities.ts'), 'utf8');
-  const inApp = [...source.matchAll(/slug: '([a-z_]+)', country: '([A-Z]{2})'/g)].map(
-    ([, slug, country]) => `${slug} ${country}`
-  );
-  const inDatabase = (await run('select slug, country_code from public.cities order by sort_order')).map(
-    (row) => `${row.slug} ${row.country_code}`
+  const inApp = [
+    ...source.matchAll(/slug: '([a-z_]+)', country: '([A-Z]{2})', center: \{ lat: ([\d.]+), lng: ([\d.]+) \}/g),
+  ].map(([, slug, country, lat, lng]) => `${slug} ${country} ${Number(lat)} ${Number(lng)}`);
+  const inDatabase = (await run('select slug, country_code, lat, lng from public.cities order by sort_order')).map(
+    (row) => `${row.slug} ${row.country_code} ${row.lat} ${row.lng}`
   );
   assert.ok(inApp.length > 0, 'no cities found in cities.ts');
   assert.deepEqual(inDatabase, inApp);
